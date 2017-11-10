@@ -1,0 +1,10 @@
+.DS_Store
+.idea/
+*.log
+logs/
+build/
+/coverage
+coverage.json
+node_modules/
+package-lock.json
+ignore/

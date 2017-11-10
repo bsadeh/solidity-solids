@@ -1,0 +1,15 @@
+{
+  "package_name": "solids",
+  "version": "0.0.1",
+  "description": "A collection of solid smart contracts & libraries for Solidity",
+  "authors": [
+    "Benny Sadeh <benny.sadeh@gmail.com>"
+  ],
+  "keywords": [
+    "solidity",
+    "ethereum",
+    "smart",
+    "contracts",
+  ],
+  "license": "MIT"
+}

@@ -1,2 +1,2 @@
 # solidity-solids
-a collection of solid  solidity contracts &amp; libraries
+A collection of solid smart contracts and libraries for Solidity
