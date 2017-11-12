@@ -9,13 +9,14 @@ contract Loggable {
   Level public level = Level.none;
 
   function levelString() public constant returns (string result) {
-    if (uint(level) == 0) return "trace";
-    else if (uint(level) == 1) return "debug";
-    else if (uint(level) == 2) return "info";
-    else if (uint(level) == 3) return "warn";
-    else if (uint(level) == 4) return "error";
-    else if (uint(level) == 5) return "fatal";
-    else return "none";
+    var _level_ = uint(level);
+    if (0 == _level_) return "trace";
+    if (1 == _level_) return "debug";
+    if (2 == _level_) return "info";
+    if (3 == _level_) return "warn";
+    if (4 == _level_) return "error";
+    if (5 == _level_) return "fatal";
+    return "none";
   }
 
   function setLogLevel(uint _level) public {
