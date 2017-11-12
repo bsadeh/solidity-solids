@@ -1,48 +1,55 @@
 const LoggableExample = artifacts.require("LoggableExample")
 
-
 contract('Loggable', function(accounts) {
-
   it("should respect log level when logging", async function () {
-    let example = await LoggableExample.deployed()
-    let result, events
+    function expectLogged(fromLevel, howMany, events, description) {
+      const possibilities = [
+        {level: 0, message: "watch Ma, I'm trace-ing"},
+        {level: 1, message: "watch Ma, I'm debug-ing"},
+        {level: 2, message: "watch Ma, I'm info-ing"},
+        {level: 3, message: "watch Ma, I'm warn-ing"},
+        {level: 4, message: "watch Ma, I'm error-ing"},
+        {level: 5, message: "watch Ma, I'm fatal-ing"}
+      ]
+      assert.equal(howMany, events.length, description)
+      for (let i = 0; i < events.length; i++) {
+        let expected = possibilities[fromLevel + i]
+        let {level, timestamp, message} = events[i];
+        assert.equal(expected.level, level)
+        assert.equal(expected.message, message)
+      }
+    }
 
-    assert.equal(6, await example.level(), "default level")
+    let example = await LoggableExample.deployed()
+    let atLevel, result, events
+
+    atLevel = 6
+    assert.equal(atLevel, await example.level(), "default level")
     assert.equal("none", await example.levelString(), "default level")
     result = await example.testLog()
     events = extractEvents("Log", result)
-    assert.equal(0, events.length, "none fired")
+    expectLogged(atLevel, 0, events, "none fired")
 
-    await example.setLogLevel(5)
-    assert.equal(5, await example.level(), "highest level")
-    assert.equal("fatal", await example.levelString());
-    result = await example.testLog();
+    atLevel = 5
+    // await example.setLogLevel(atLevel)
+    await example.setLogLevelFromString("fatal")
+    assert.equal(atLevel, await example.level(), "highest level")
+    assert.equal("fatal", await example.levelString())
+    result = await example.testLog()
     events = extractEvents("Log", result)
-    assert.equal(1, events.length, "`fatal` is highest, so only it is fired")
-    assert.equal("watch Ma, I'm fatal-ing", events[0].message)
-    assert.equal(5, events[0].level)
+    expectLogged(atLevel, 1, events, "`fatal` is highest, so only it is fired")
 
-    await example.setLogLevel(0)
+    atLevel = 0
+    await example.setLogLevel(atLevel)
     assert.equal(0, await example.level(), "lowest level")
-    assert.equal("trace", await example.levelString());
-    result = await example.testLog();
+    assert.equal("trace", await example.levelString())
+    result = await example.testLog()
     events = extractEvents("Log", result)
-    assert.equal(6, events.length, "all from level `trace` (lowest) to `fatal` (highest) are fired")
-    assert.equal("watch Ma, I'm trace-ing", events[0].message)
-    assert.equal("watch Ma, I'm debug-ing", events[1].message)
-    assert.equal("watch Ma, I'm info-ing", events[2].message)
-    assert.equal("watch Ma, I'm warn-ing", events[3].message)
-    assert.equal("watch Ma, I'm error-ing", events[4].message)
-    assert.equal("watch Ma, I'm fatal-ing", events[5].message)
-    assert.equal(0, events[0].level)
-    assert.equal(1, events[1].level)
-    assert.equal(2, events[2].level)
-    assert.equal(3, events[3].level)
-    assert.equal(4, events[4].level)
-    assert.equal(5, events[5].level)
+    expectLogged(atLevel, 6, events, "all from level `trace` (lowest) to `fatal` (highest) are fired")
   })
 
 })
+
 
 function extractEvents(eventName, result) {
   let results = []

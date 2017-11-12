@@ -9,17 +9,6 @@ contract Loggable {
   Level public level = Level.none;
 
   function levelString() public constant returns (string result) {
-//    uint l = uint(level);
-//    assembly {
-//      switch l
-//      case 0 {mstore(result, "trace")}
-//      case 1 {mstore(result, "debug")}
-//      case 2 {mstore(result, "info")}
-//      case 3 {mstore(result, "warn")}
-//      case 4 {mstore(result, "error")}
-//      case 5 {mstore(result, "fatal")}
-//      default {mstore(result, "none")}
-//    }
     if (uint(level) == 0) return "trace";
     else if (uint(level) == 1) return "debug";
     else if (uint(level) == 2) return "info";
@@ -33,6 +22,17 @@ contract Loggable {
     require(uint(Level.none) >= _level);
     level = Level(_level);
   }
+
+  function setLogLevelFromString(string _level) public {
+    if (equals(_level, "trace")) level = Level.trace;
+    else if (equals(_level, "debug")) level = Level.debug;
+    else if (equals(_level, "info")) level = Level.info;
+    else if (equals(_level, "warn")) level = Level.warn;
+    else if (equals(_level, "error")) level = Level.error;
+    else if (equals(_level, "fatal")) level = Level.fatal;
+    else level = Level.none;
+  }
+  function equals(string a, string b) private pure returns (bool) {return keccak256(a) == keccak256(b);}
 
   function trace(string _message) public {if (level <= Level.trace) log(Level.trace, _message);}
   function debug(string _message) public {if (level <= Level.debug) log(Level.debug, _message);}
