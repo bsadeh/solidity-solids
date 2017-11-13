@@ -52,10 +52,5 @@ contract('Loggable', function(accounts) {
 
 
 function extractEvents(eventName, result) {
-  let results = []
-  for (let i = 0; i < result.logs.length; i++) {
-    let log = result.logs[i]
-    if (log.event == eventName) results.push(log.args)
-  }
-  return results
+  return result.logs.filter(each => each.event === eventName).map(each => each.args)
 }

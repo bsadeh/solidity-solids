@@ -9,6 +9,17 @@ contract Loggable {
   Level public level = Level.none;
 
   function levelString() public constant returns (string result) {
+//    uint l = uint(level);
+//    assembly {
+//      switch l
+//      case 0 {result := "trace"}
+//      case 1 {result := "debug"}
+//      case 2 {result := "info"}
+//      case 3 {result := "warn"}
+//      case 4 {result := "error"}
+//      case 5 {result := "trace"}
+//      default {result := "fatal"}
+//    }
     var _level_ = uint(level);
     if (0 == _level_) return "trace";
     if (1 == _level_) return "debug";
