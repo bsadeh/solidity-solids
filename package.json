@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "description": "A collection of solid smart contracts & libraries for Solidity",
   "scripts": {
-    "test": "truffle test",
-    "console": "truffle console"
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",
@@ -20,24 +19,31 @@
     "url": "https://github.com/bsadeh/solidity-solids/issues"
   },
   "homepage": "https://github.com/bsadeh/solidity-solids",
+  "babel": {
+    "presets": [
+      "node8"
+    ],
+    "plugins": [
+      "source-map-support"
+    ]
+  },
   "devDependencies": {
-    "babel-polyfill": "^6.23.0",
-    "babel-preset-es2015": "^6.18.0",
-    "babel-preset-stage-2": "^6.18.0",
-    "babel-preset-stage-3": "^6.17.0",
-    "babel-register": "^6.23.0",
-    "chai": "^4.0.2",
-    "chai-as-promised": "^7.0.0",
-    "chai-bignumber": "^2.0.0",
-    "coveralls": "^2.13.1",
-    "ethereumjs-util": "^5.1.2",
-    "ethereumjs-testrpc": "^6.0.1",
-    "ethereumjs-wallet": "0.6.0",
+    "babel-cli": "^6.26.0",
+    "babel-plugin-source-map-support": "^1.0.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-node8": "^1.2.0",
+    "ethereumjs-wallet": "^0.6.0",
+    "ethjs-contract": "^0.1.9",
+    "ethjs-provider-http": "^0.1.6",
+    "ethjs-query": "^0.3.3",
+    "ethjs-rpc": "^0.1.8",
     "expect.js": "^0.3.1",
-    "mocha-lcov-reporter": "^1.3.0",
-    "solidity-coverage": "^0.2.2",
-    "truffle": "^4.0.1",
-    "truffle-hdwallet-provider": "0.0.3",
-    "web3": "^1.0.0-beta2"
+    "ganache-cli": "^6.0.3",
+    "solidity-coverage": "^0.4.9",
+    "truffle": "^4.0.5",
+    "truffle-hdwallet-provider": "0.0.3"
+  },
+  "dependencies": {
+    "source-map-support": "^0.5.3"
   }
 }

@@ -1,7 +1,15 @@
-const LoggableExample = artifacts.require("LoggableExample")
+const expect = require('expect.js');
 
-contract('Loggable', function(accounts) {
-  it("should respect log level when logging", async function () {
+const Contract = artifacts.require("LoggableExample")
+
+contract('Loggable', (accounts) => {
+  let contract
+
+  before(async () => {
+    contract = await Contract.deployed()
+  })
+
+  it("should respect log level when logging", async () => {
     function expectLogged(fromLevel, howMany, events, description) {
       const possibilities = [
         {level: 0, message: "watch Ma, I'm trace-ing"},
@@ -20,30 +28,29 @@ contract('Loggable', function(accounts) {
       }
     }
 
-    let example = await LoggableExample.deployed()
     let atLevel, result, events
 
     atLevel = 6
-    assert.equal(atLevel, await example.level(), "default level")
-    assert.equal("none", await example.levelString(), "default level")
-    result = await example.testLog()
+    assert.equal(atLevel, await contract.level(), "default level")
+    assert.equal("none", await contract.levelString(), "default level")
+    result = await contract.testLog()
     events = extractEvents("Log", result)
     expectLogged(atLevel, 0, events, "none fired")
 
     atLevel = 5
-    // await example.setLogLevel(atLevel)
-    await example.setLogLevelFromString("fatal")
-    assert.equal(atLevel, await example.level(), "highest level")
-    assert.equal("fatal", await example.levelString())
-    result = await example.testLog()
+    // await contract.setLogLevel(atLevel)
+    await contract.setLogLevelFromString("fatal")
+    assert.equal(atLevel, await contract.level(), "highest level")
+    assert.equal("fatal", await contract.levelString())
+    result = await contract.testLog()
     events = extractEvents("Log", result)
     expectLogged(atLevel, 1, events, "`fatal` is highest, so only it is fired")
 
     atLevel = 0
-    await example.setLogLevel(atLevel)
-    assert.equal(0, await example.level(), "lowest level")
-    assert.equal("trace", await example.levelString())
-    result = await example.testLog()
+    await contract.setLogLevel(atLevel)
+    assert.equal(0, await contract.level(), "lowest level")
+    assert.equal("trace", await contract.levelString())
+    result = await contract.testLog()
     events = extractEvents("Log", result)
     expectLogged(atLevel, 6, events, "all from level `trace` (lowest) to `fatal` (highest) are fired")
   })
@@ -51,6 +58,4 @@ contract('Loggable', function(accounts) {
 })
 
 
-function extractEvents(eventName, result) {
-  return result.logs.filter(each => each.event === eventName).map(each => each.args)
-}
+const extractEvents = (name, result) => result.logs.filter(x => x.event === name).map(x => x.args)

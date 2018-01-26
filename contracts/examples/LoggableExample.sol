@@ -4,7 +4,6 @@ import "../Loggable.sol";
 
 
 contract LoggableExample is Loggable {
-
   function testLog() public {
     trace("watch Ma, I'm trace-ing");
     debug("watch Ma, I'm debug-ing");
@@ -13,5 +12,4 @@ contract LoggableExample is Loggable {
     error("watch Ma, I'm error-ing");
     fatal("watch Ma, I'm fatal-ing");
   }
-
 }

@@ -3,8 +3,5 @@
 *.log
 logs/
 build/
-/coverage
-coverage.json
+coverage/
 node_modules/
-package-lock.json
-ignore/

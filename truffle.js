@@ -7,7 +7,12 @@ module.exports = {
       host: 'localhost',
       port: 8545,
       network_id: '*', // Match any network id
-      gas: 4500000,
+      // https://github.com/trufflesuite/truffle/issues/271#issuecomment-341651827
+      gas: 3000000,
+    },
+    ganache: {
+      host: 'localhost',
+      port: 7545,
     }
   }
 }
