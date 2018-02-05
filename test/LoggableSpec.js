@@ -1,4 +1,4 @@
-const expect = require('expect.js');
+const expect = require('expect.js')
 
 const Contract = artifacts.require("LoggableExample")
 
@@ -22,7 +22,7 @@ contract('Loggable', (accounts) => {
       assert.equal(howMany, events.length, description)
       for (let i = 0; i < events.length; i++) {
         let expected = possibilities[fromLevel + i]
-        let {level, timestamp, message} = events[i];
+        let {level, timestamp, message} = events[i]
         assert.equal(expected.level, level)
         assert.equal(expected.message, message)
       }

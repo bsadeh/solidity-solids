@@ -9,30 +9,33 @@ contract RoleBased {
   mapping (string => mapping (address => bool)) private roles;
   mapping (string => address[]) private players;
 
-  modifier onlyRole(string role) { require(isPlayer(role, tx.origin)); _; }
+  modifier onlyNominator() { require(isNominator(msg.sender)); _; }
+  function isNominator(address nominator) public constant returns (bool) { return isPlayer("nominator", nominator); }
+  function getNominators() public constant returns (address[]) { return getPlayers("nominator"); }
 
+  function initialNominator(address nominator) internal { _addPlayer_("nominator", nominator); }
+  function nominate(address nominator) external { addPlayer("nominator", nominator); }
+  function denominate(address nominator) external {
+    removePlayer("nominator", nominator);
+    require(getNominators().length > 0); // ... must have at least one nominator at all times!
+  }
+
+  modifier onlyRole(string role) { require(isPlayer(role, msg.sender)); _; }
   function isPlayer(string role, address player) public constant returns (bool) { return roles[role][player]; }
   function getPlayers(string role) public constant returns (address[]) { return players[role]; }
 
-  function setPlayers(string role, address[] _players) internal {
-    for (uint i = 0; i < _players.length; i++) {
-      roles[role][_players[i]] = true;
-      AddedPlayer(role, _players[i]);
-    }
-    players[role] = _players;
+  function addPlayer(string role, address player) public onlyNominator {
+    if (!isPlayer(role, player)) _addPlayer_(role, player);
   }
 
-  function addPlayer(string role, address player) public onlyRole(role) {
-    if (!isPlayer(role, player)) {
-      roles[role][player] = true;
-      players[role].push(player);
-      AddedPlayer(role, player);
-    }
+  function _addPlayer_(string role, address player) private {
+    roles[role][player] = true;
+    players[role].push(player);
+    AddedPlayer(role, player);
   }
 
-  function removePlayer(string role, address player) public onlyRole(role) {
+  function removePlayer(string role, address player) public onlyNominator {
     if (isPlayer(role, player)) {
-      require(players[role].length > 1); // => never be left with no players!
       roles[role][player] = false;
       uint last = players[role].length - 1;
       for (uint i = 0; i < last; i++) {
