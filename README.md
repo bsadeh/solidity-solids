@@ -1,5 +1,12 @@
 # solidity-solids
-A collection of solid smart contracts and libraries for Solidity
+A collection of solid smart contracts and libraries for Solidity:
+
+* RoleBased
+* HasOwners
+* Loggable
+* Switchable
+* Validating
+* Math
 
 ### Prerequisites:
 
