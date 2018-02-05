@@ -9,6 +9,7 @@ contract RoleBased {
   mapping (string => mapping (address => bool)) private roles;
   mapping (string => address[]) private players;
 
+
   modifier onlyNominator() { require(isNominator(msg.sender)); _; }
   function isNominator(address nominator) public constant returns (bool) { return isPlayer("nominator", nominator); }
   function getNominators() public constant returns (address[]) { return getPlayers("nominator"); }
@@ -19,6 +20,7 @@ contract RoleBased {
     removePlayer("nominator", nominator);
     require(getNominators().length > 0); // ... must have at least one nominator at all times!
   }
+
 
   modifier onlyRole(string role) { require(isPlayer(role, msg.sender)); _; }
   function isPlayer(string role, address player) public constant returns (bool) { return roles[role][player]; }

@@ -97,7 +97,7 @@ contract('RoleBased > owner', (accounts) => {
     expect(await contract.getOwners()).to.eql([])
   })
 
-  it.only('scoping by role: onlyOwner', async () => {
+  it('scoping by role: onlyOwner', async () => {
     await contract.addOwner(maybeOwner, {from: nominator})
     expect((await contract.counter()).toNumber()).to.eql(1)
 
