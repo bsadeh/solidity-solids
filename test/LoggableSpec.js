@@ -1,4 +1,4 @@
-const expect = require('expect.js')
+const { extractEvents } = require('./web3_provider_help')
 
 const Contract = artifacts.require("LoggableExample")
 
@@ -56,6 +56,3 @@ contract('Loggable', (accounts) => {
   })
 
 })
-
-
-const extractEvents = (name, result) => result.logs.filter(x => x.event === name).map(x => x.args)
