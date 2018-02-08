@@ -2,19 +2,20 @@ pragma solidity ^0.4.18;
 
 
 contract RoleBased {
-  event AddedPlayer(string role, address indexed player);
-  event RemovedPlayer(string role, address indexed player);
 
   /* mapping of roles to mapping of players (role => player => bool) */
   mapping (string => mapping (address => bool)) private roles;
   mapping (string => address[]) private players;
 
 
+  function RoleBased(address nominator) public {
+    _addPlayer_("nominator", nominator);
+  }
+
   modifier onlyNominator() { require(isNominator(msg.sender)); _; }
   function isNominator(address nominator) public constant returns (bool) { return isPlayer("nominator", nominator); }
   function getNominators() public constant returns (address[]) { return getPlayers("nominator"); }
 
-  function initialNominator(address nominator) internal { _addPlayer_("nominator", nominator); }
   function nominate(address nominator) external { addPlayer("nominator", nominator); }
   function denominate(address nominator) external {
     removePlayer("nominator", nominator);
@@ -35,6 +36,7 @@ contract RoleBased {
     players[role].push(player);
     AddedPlayer(role, player);
   }
+  event AddedPlayer(string role, address indexed player);
 
   function removePlayer(string role, address player) public onlyNominator {
     if (isPlayer(role, player)) {
@@ -51,4 +53,5 @@ contract RoleBased {
       RemovedPlayer(role, player);
     }
   }
+  event RemovedPlayer(string role, address indexed player);
 }
