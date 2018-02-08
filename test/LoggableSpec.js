@@ -2,7 +2,7 @@ const { extractEvents } = require('./web3_provider_help')
 
 const Contract = artifacts.require("LoggableExample")
 
-contract('Loggable', (accounts) => {
+contract('Loggable', (_) => {
   let contract
 
   before(async () => {

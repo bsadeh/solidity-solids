@@ -11,7 +11,7 @@ A collection of solid smart contracts and libraries for Solidity:
 ### Prerequisites:
 
 ```
-truffle 4.0.5
+truffle 4.0.6
 node 8.9.4
 ```
 

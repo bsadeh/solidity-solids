@@ -4,11 +4,13 @@ import "./RoleBased.sol";
 
 
 contract HasOwners is RoleBased {
+  string constant private role = "owner";
+
   function HasOwners(address nominator) RoleBased(nominator) public { }
 
-  modifier onlyOwner { if (isPlayer("owner", msg.sender)) _; }
-  function isOwner(address owner) public constant returns (bool) { return isPlayer("owner", owner); }
-  function getOwners() public constant returns (address[]) { return getPlayers("owner"); }
-  function addOwner(address owner) external { addPlayer("owner", owner); }
-  function removeOwner(address owner) public { removePlayer("owner", owner); }
+  modifier onlyOwner { if (isPlayer(role, msg.sender)) _; }
+  function isOwner(address subject) public constant returns (bool) { return isPlayer(role, subject); }
+  function getOwners() public constant returns (address[]) { return getPlayers(role); }
+  function addOwner(address subject) external { addPlayer(role, subject); }
+  function removeOwner(address subject) public { removePlayer(role, subject); }
 }

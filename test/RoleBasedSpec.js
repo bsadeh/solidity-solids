@@ -3,9 +3,7 @@ const expect = require('expect.js')
 const Contract = artifacts.require('RoleBasedExample')
 
 
-contract('RoleBased > owner', (accounts) => {
-  const nominator = accounts[1], maybeNominator = accounts[2], notNominator = accounts[3]
-  const maybeOwner = accounts[4], notOwner = accounts[5]
+contract('RoleBased > owner', ([, nominator, maybeNominator, notNominator, maybeOwner, notOwner]) => {
   let contract
 
   before(async () => {
@@ -65,13 +63,13 @@ contract('RoleBased > owner', (accounts) => {
       await contract.addOwner(maybeOwner, {from: notNominator})
       fail('sender is not a nominator')
     } catch (e) {
-      expect(e.message, 'VM Exception while processing transaction: revert')
-      expect(await contract.isOwner(maybeOwner)).to.eql(false)
+      assert(e.message === 'VM Exception while processing transaction: revert')
+      assert.isFalse(await contract.isOwner(maybeOwner))
     }
 
     await contract.addOwner(maybeOwner, {from: nominator})
-    expect(await contract.isOwner(maybeOwner)).to.eql(true)
-    expect(await contract.isOwner(nominator)).to.eql(false)
+    assert.isTrue(await contract.isOwner(maybeOwner))
+    assert.isFalse(await contract.isOwner(nominator))
     expect(await contract.getOwners()).to.eql([maybeOwner])
   })
 
@@ -83,8 +81,8 @@ contract('RoleBased > owner', (accounts) => {
       await contract.removeOwner(maybeOwner, {from: notNominator})
       fail('sender must be an owner')
     } catch (e) {
-      expect(e.message, 'VM Exception while processing transaction: revert')
-      expect(await contract.isOwner(maybeOwner)).to.eql(true)
+      assert(e.message === 'VM Exception while processing transaction: revert')
+      assert(await contract.isOwner(maybeOwner))
     }
 
     expect(await contract.getOwners()).to.eql([maybeOwner])
@@ -93,18 +91,18 @@ contract('RoleBased > owner', (accounts) => {
     expect(await contract.getOwners()).to.eql([maybeOwner])
 
     await contract.removeOwner(maybeOwner, {from: nominator})
-    expect(await contract.isOwner(maybeOwner)).to.eql(false)
+    assert.isFalse(await contract.isOwner(maybeOwner))
     expect(await contract.getOwners()).to.eql([])
   })
 
   it('scoping by role: onlyOwner', async () => {
     await contract.addOwner(maybeOwner, {from: nominator})
-    expect((await contract.counter()).toNumber()).to.eql(1)
+    assert((await contract.counter()).toNumber() === 1)
 
     await contract.increment({from: notOwner})
-    expect((await contract.counter()).toNumber()).to.eql(1)
+    assert((await contract.counter()).toNumber() === 1)
 
     await contract.increment({from: maybeOwner})
-    expect((await contract.counter()).toNumber()).to.eql(2)
+    assert((await contract.counter()).toNumber() === 2)
   })
 })
