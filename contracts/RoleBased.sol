@@ -2,24 +2,25 @@ pragma solidity ^0.4.18;
 
 
 contract RoleBased {
+  string constant private nominator = "nominator";
 
   /* mapping of roles to mapping of players (role => player => bool) */
   mapping (string => mapping (address => bool)) private roles;
   mapping (string => address[]) private players;
 
 
-  function RoleBased(address nominator) public {
-    _addPlayer_("nominator", nominator);
+  function RoleBased(address subject) public {
+    _addPlayer_(nominator, subject);
   }
 
   modifier onlyNominator() { require(isNominator(msg.sender)); _; }
-  function isNominator(address nominator) public constant returns (bool) { return isPlayer("nominator", nominator); }
-  function getNominators() public constant returns (address[]) { return getPlayers("nominator"); }
+  function isNominator(address subject) public constant returns (bool) { return isPlayer(nominator, subject); }
+  function getNominators() public constant returns (address[]) { return getPlayers(nominator); }
 
-  function nominate(address nominator) external { addPlayer("nominator", nominator); }
-  function denominate(address nominator) external {
-    removePlayer("nominator", nominator);
-    require(getNominators().length > 0); // ... must have at least one nominator at all times!
+  function nominate(address subject) external { addPlayer(nominator, subject); }
+  function denominate(address subject) external {
+    removePlayer(nominator, subject);
+    require(getNominators().length > 0); // ... must have at least one subject at all times!
   }
 
 

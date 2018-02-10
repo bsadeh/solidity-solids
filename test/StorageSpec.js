@@ -1,4 +1,4 @@
-const { soliditySha3 } = require('./web3_provider_help')
+const { isRevertException, soliditySha3 } = require('./web3_provider_help')
 const expect = require('expect.js')
 
 const Contract = artifacts.require('GenericStorage')
@@ -18,10 +18,10 @@ contract('Storage', (accounts) => {
 
   before(async () => {
     contract = await Contract.new(nominator)
-    await contract.addReader(reader, {from: nominator});
-    await contract.addReader(reader_writer, {from: nominator});
-    await contract.addWriter(writer, {from: nominator});
-    await contract.addWriter(reader_writer, {from: nominator});
+    await contract.addReader(reader, { from: nominator });
+    await contract.addReader(reader_writer, { from: nominator });
+    await contract.addWriter(writer, { from: nominator });
+    await contract.addWriter(reader_writer, { from: nominator });
   })
 
   it('nominating: readers & writers', async () => {
@@ -42,62 +42,62 @@ contract('Storage', (accounts) => {
 
 
   it('writership: only writers can write', async () => {
-    await contract.stringSet(key5, value5, {from: writer})
-    await contract.stringSet(key6, value6, {reader_writer})
-    await contract.stringSet(key6, "rewrite", {writer})
-    await contract.stringSet(key6, "re-rewrite", {reader_writer})
+    await contract.stringSet(key5, value5, { from: writer })
+    await contract.stringSet(key6, value6, { from: reader_writer })
+    await contract.stringSet(key6, "rewrite", { from: writer })
+    await contract.stringSet(key6, "re-rewrite", { from: reader_writer })
 
-    // try {
-    //   // await contract.uintSet(key3, value3)
-    //   await contract.stringSet(key5, value5, {from: anyone})
-    //   console.log(">>>>>>>>>>>>>>>>", "failed to fail :-(")
-    //   fail('sender must be an writer')
-    // } catch (e) {
-    //   assert(e.message === 'VM Exception while processing transaction: revert')
-    // }
-    // try {
-    //   await contract.stringSet(key5, value5, {from: reader})
-    //   console.log(">>>>>>>>>>>>>>>>", "failed to fail :-(")
-    //   // fail('sender must be an writer')
-    // } catch (e) {
-    //   console.log(">>>>>>>>>>>>>>>>", e.message)
-    //   // assert(e.message === 'VM Exception while processing transaction: revert')
-    // }
-    await contract.boolSet(key2, value2, {from: reader_writer})
+    try {
+      // await contract.uintSet(key3, value3)
+      await contract.stringSet(key5, value5, { from: anyone })
+      console.log(">>>>>>>>>>>>>>>>", "failed to fail :-(")
+      fail('sender must be an writer')
+    } catch (e) {
+      assert(isRevertException(e))
+    }
+    try {
+      await contract.stringSet(key5, value5, { from: reader })
+      console.log(">>>>>>>>>>>>>>>>", "failed to fail :-(")
+      // fail('sender must be an writer')
+    } catch (e) {
+      console.log(">>>>>>>>>>>>>>>>", e.message)
+      // assert(isRevertException(e))
+    }
+    await contract.boolSet(key2, value2, { from: reader_writer })
   })
 
   it('readership: only readers can read', async () => {
-    await contract.boolSet(key1, value1, {from: writer})
-    await contract.boolSet(key2, value2, {from: writer})
-    await contract.uintSet(key3, value3, {from: reader_writer})
-    await contract.uintSet(key4, value4, {from: reader_writer})
-    await contract.stringSet(key5, value5, {from: writer})
-    await contract.stringSet(key6, value6, {from: writer})
-    await contract.addressSet(key7, value7, {from: reader_writer})
-    await contract.addressSet(key8, value8, {from: reader_writer})
+    await contract.boolSet(key1, value1, { from: writer })
+    await contract.boolSet(key2, value2, { from: writer })
+    await contract.uintSet(key3, value3, { from: reader_writer })
+    await contract.uintSet(key4, value4, { from: reader_writer })
+    await contract.stringSet(key5, value5, { from: writer })
+    await contract.stringSet(key6, value6, { from: writer })
+    await contract.addressSet(key7, value7, { from: reader_writer })
+    await contract.addressSet(key8, value8, { from: reader_writer })
 
-    assert(await contract.boolGet(key1, {from: reader}) === value1)
-    assert(await contract.boolGet(key2, {from: reader_writer}) === value2)
-    assert((await contract.uintGet(key3, {from: reader})).toNumber() === value3)
-    assert((await contract.uintGet(key4, {from: reader_writer})).toNumber() === value4)
-    assert(await contract.stringGet(key5, {from: reader}) === value5)
-    assert(await contract.stringGet(key6, {from: reader_writer}) === value6)
-    assert(await contract.addressGet(key7, {from: reader}) === value7)
-    assert(await contract.addressGet(key8, {from: reader_writer}) === value8)
+    assert(await contract.boolGet(key1, { from: reader }) === value1)
+    assert(await contract.boolGet(key2, { from: reader_writer }) === value2)
+    assert((await contract.uintGet(key3, { from: reader })).toNumber() === value3)
+    assert((await contract.uintGet(key4, { from: reader_writer })).toNumber() === value4)
+    assert(await contract.stringGet(key5, { from: reader }) === value5)
+    assert(await contract.stringGet(key6, { from: reader_writer }) === value6)
+    assert(await contract.addressGet(key7, { from: reader }) === value7)
+    assert(await contract.addressGet(key8, { from: reader_writer }) === value8)
 
     // try {
-    //   await contract.boolGet(key1, {from: anyone})
+    //   await contract.boolGet(key1, { from: anyone })
     //   fail('sender must be a reader')
     // } catch (e) {
-    //   assert(e.message === 'VM Exception while processing transaction: revert')
+    //   assert(isRevertException(e))
     // }
     // try {
-    //   await contract.boolGet(key1, {from: writer})
+    //   await contract.boolGet(key1, { from: writer })
     //   console.log(">>>>>>>>>>>>>>>>", "failed to fail :-(")
     //   // fail('sender must be a reader')
     // } catch (e) {
     //   console.log(">>>>>>>>>>>>>>>>", e.message)
-    //   // assert(e.message === 'VM Exception while processing transaction: revert')
+    //   // assert(isRevertException(e))
     // }
   })
 })

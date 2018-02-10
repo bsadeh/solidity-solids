@@ -12,12 +12,12 @@ contract('Loggable', (_) => {
   it("should respect log level when logging", async () => {
     function expectLogged(fromLevel, howMany, events, description) {
       const possibilities = [
-        {level: 0, message: "watch Ma, I'm trace-ing"},
-        {level: 1, message: "watch Ma, I'm debug-ing"},
-        {level: 2, message: "watch Ma, I'm info-ing"},
-        {level: 3, message: "watch Ma, I'm warn-ing"},
-        {level: 4, message: "watch Ma, I'm error-ing"},
-        {level: 5, message: "watch Ma, I'm fatal-ing"}
+        { level: 0, message: "watch Ma, I'm trace-ing"},
+        { level: 1, message: "watch Ma, I'm debug-ing"},
+        { level: 2, message: "watch Ma, I'm info-ing"},
+        { level: 3, message: "watch Ma, I'm warn-ing"},
+        { level: 4, message: "watch Ma, I'm error-ing"},
+        { level: 5, message: "watch Ma, I'm fatal-ing"}
       ]
       assert.equal(howMany, events.length, description)
       for (let i = 0; i < events.length; i++) {
