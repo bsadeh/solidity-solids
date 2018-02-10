@@ -14,9 +14,9 @@ contract Switchable {
   modifier whenOn() { require(isOn); _; }
   modifier whenOff() { require(!isOn); _; }
 
-  function switchOn() onlyOwner whenOff external { isOn = true; On(); }
+  function switchOn() onlyOwner external { if (!isOn) { isOn = true; On(); } }
   event On();
 
-  function switchOff() onlyOwner whenOn external { isOn = false; Off(); }
+  function switchOff() onlyOwner external { if (isOn) { isOn = false; Off(); } }
   event Off();
 }
