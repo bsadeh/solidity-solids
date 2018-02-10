@@ -2,7 +2,8 @@
 A collection of solid smart contracts and libraries for Solidity:
 
 * RoleBased
-* HasOwners
+* Has<*>
+* GenericStorage
 * Loggable
 * Switchable
 * Validating
