@@ -8,7 +8,7 @@ contract HasOwners is RoleBased {
 
   function HasOwners(address nominator) RoleBased(nominator) public { }
 
-  modifier onlyOwner { if (isPlayer(owner, msg.sender)) _; }
+  modifier onlyOwner { require(isOwner(msg.sender)); _; }
   function isOwner(address subject) public constant returns (bool) { return isPlayer(owner, subject); }
   function getOwners() public constant returns (address[]) { return getPlayers(owner); }
   function addOwner(address subject) external { addPlayer(owner, subject); }

@@ -8,7 +8,7 @@ contract HasWriters is RoleBased {
 
   function HasWriters(address nominator) RoleBased(nominator) public { }
 
-  modifier onlyWriter { if (isPlayer(writer, msg.sender)) _; }
+  modifier onlyWriter { require(isWriter(msg.sender)); _; }
   function isWriter(address subject) public constant returns (bool) { return isPlayer(writer, subject); }
   function getWriters() public constant returns (address[]) { return getPlayers(writer); }
   function addWriter(address subject) external { addPlayer(writer, subject); }

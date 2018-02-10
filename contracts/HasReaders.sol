@@ -8,7 +8,7 @@ contract HasReaders is RoleBased {
 
   function HasReaders(address nominator) RoleBased(nominator) public { }
 
-  modifier onlyReader { if (isPlayer(reader, msg.sender)) _; }
+  modifier onlyReader { require(isReader(msg.sender)); _; }
   function isReader(address subject) public constant returns (bool) { return isPlayer(reader, subject); }
   function getReaders() public constant returns (address[]) { return getPlayers(reader); }
   function addReader(address subject) external { addPlayer(reader, subject); }

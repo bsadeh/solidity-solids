@@ -40,30 +40,23 @@ contract('Storage', (accounts) => {
     assert.isTrue(await contract.isWriter(reader_writer))
   })
 
-
   it('writership: only writers can write', async () => {
     await contract.stringSet(key5, value5, { from: writer })
     await contract.stringSet(key6, value6, { from: reader_writer })
-    await contract.stringSet(key6, "rewrite", { from: writer })
-    await contract.stringSet(key6, "re-rewrite", { from: reader_writer })
 
     try {
-      // await contract.uintSet(key3, value3)
-      await contract.stringSet(key5, value5, { from: anyone })
-      console.log(">>>>>>>>>>>>>>>>", "failed to fail :-(")
+      await contract.uintSet(key3, value3, { from: anyone })
       fail('sender must be an writer')
     } catch (e) {
       assert(isRevertException(e))
     }
     try {
-      await contract.stringSet(key5, value5, { from: reader })
-      console.log(">>>>>>>>>>>>>>>>", "failed to fail :-(")
-      // fail('sender must be an writer')
+      await contract.uintSet(key3, value3, { from: reader })
+      fail('sender must be an writer')
     } catch (e) {
-      console.log(">>>>>>>>>>>>>>>>", e.message)
-      // assert(isRevertException(e))
+      assert(isRevertException(e))
     }
-    await contract.boolSet(key2, value2, { from: reader_writer })
+    await contract.uintSet(key3, value3, { from: reader_writer })
   })
 
   it('readership: only readers can read', async () => {
@@ -85,19 +78,17 @@ contract('Storage', (accounts) => {
     assert(await contract.addressGet(key7, { from: reader }) === value7)
     assert(await contract.addressGet(key8, { from: reader_writer }) === value8)
 
-    // try {
-    //   await contract.boolGet(key1, { from: anyone })
-    //   fail('sender must be a reader')
-    // } catch (e) {
-    //   assert(isRevertException(e))
-    // }
-    // try {
-    //   await contract.boolGet(key1, { from: writer })
-    //   console.log(">>>>>>>>>>>>>>>>", "failed to fail :-(")
-    //   // fail('sender must be a reader')
-    // } catch (e) {
-    //   console.log(">>>>>>>>>>>>>>>>", e.message)
-    //   // assert(isRevertException(e))
-    // }
+    try {
+      await contract.boolGet(key1, { from: anyone })
+      fail('sender must be a reader')
+    } catch (e) {
+      assert(isRevertException(e))
+    }
+    try {
+      await contract.boolGet(key1, { from: writer })
+      fail('sender must be a reader')
+    } catch (e) {
+      assert(isRevertException(e))
+    }
   })
 })

@@ -3,7 +3,10 @@ pragma solidity ^0.4.18;
 import "./HasReaders.sol";
 import "./HasWriters.sol";
 
-
+/*
+  generic storage for { bool, int, uint, bytes, string, address } types.
+  read/write permissions are distinct: only readers can read & only writes can write
+*/
 contract GenericStorage is HasReaders, HasWriters {
   function GenericStorage(address nominator) HasReaders(nominator) HasWriters(nominator) public { }
 
