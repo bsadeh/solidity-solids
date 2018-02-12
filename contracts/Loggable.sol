@@ -1,12 +1,12 @@
 pragma solidity ^0.4.18;
 
 
+/* a general purpose event publish, intended to be mixed-in */
 contract Loggable {
 
   enum Level {trace, debug, info, warn, error, fatal, none}
 
   Level public level = Level.none;
-
 
   function levelString() public constant returns (string result) {
     var _level_ = uint(level);

@@ -1,6 +1,10 @@
 pragma solidity ^0.4.18;
 
 
+/*
+  a general purpose role-based access control.
+  intended to be mixed-in, but specialized roles would have more clarity (e.g.: HasOwners)
+*/
 contract RoleBased {
   string constant private nominator = "nominator";
 

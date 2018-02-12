@@ -41,6 +41,7 @@
     "ethjs-rpc": "^0.1.8",
     "expect.js": "^0.3.1",
     "ganache-cli": "^6.0.3",
+    "immutable": "^3.8.2",
     "solidity-coverage": "^0.4.9",
     "truffle": "^4.0.6",
     "truffle-hdwallet-provider": "0.0.3"

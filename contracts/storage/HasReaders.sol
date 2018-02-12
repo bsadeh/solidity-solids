@@ -1,8 +1,9 @@
 pragma solidity ^0.4.18;
 
-import "./RoleBased.sol";
+import "../RoleBased.sol";
 
 
+/* a general purpose "readership", intended to be mixed-in */
 contract HasReaders is RoleBased {
   string constant private reader = "reader";
 

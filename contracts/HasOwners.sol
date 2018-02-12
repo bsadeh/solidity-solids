@@ -3,6 +3,7 @@ pragma solidity ^0.4.18;
 import "./RoleBased.sol";
 
 
+/* a general purpose "ownership", intended to be mixed-in */
 contract HasOwners is RoleBased {
   string constant private owner = "owner";
 

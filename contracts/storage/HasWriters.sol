@@ -1,8 +1,9 @@
 pragma solidity ^0.4.18;
 
-import "./RoleBased.sol";
+import "../RoleBased.sol";
 
 
+/* a general purpose "writership", intended to be mixed-in */
 contract HasWriters is RoleBased {
   string constant private writer = "writer";
 

@@ -5,9 +5,13 @@ import "./HasWriters.sol";
 
 /*
   generic storage for { bool, int, uint, bytes, string, address } types.
-  read/write permissions are distinct: only readers can read & only writes can write
+  read/write permissions are distinct: only readers can read, and only writes can write.
+
+  intended to be deployed as a stand-alone contract, but can be mixed-in.
 */
 contract GenericStorage is HasReaders, HasWriters {
+  string public constant version = "1.0.0";
+
   function GenericStorage(address nominator) HasReaders(nominator) HasWriters(nominator) public { }
 
   mapping (bytes32 => bool) private boolStore;
