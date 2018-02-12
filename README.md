@@ -1,13 +1,16 @@
 # solidity-solids
-A collection of solid smart contracts and libraries for Solidity:
+A collection of solid smart contracts and libraries for Solidity
 
-* RoleBased
-* Has<*>
-* GenericStorage
-* Loggable
+
+#### sample:
+* RoleBased (and Has<*> specializations)
 * Switchable
+* Loggable
 * Validating
 * Math
+* GenericStorage
+* financial: Bank & Accountant
+
 
 ### Prerequisites:
 
