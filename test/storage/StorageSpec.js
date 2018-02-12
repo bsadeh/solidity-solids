@@ -1,7 +1,7 @@
 const expect = require('expect.js')
-const { isRevertException, soliditySha3 } = require('./web3_provider_help')
+const { isRevertException, soliditySha3 } = require('../web3_provider_help')
 
-const Contract = artifacts.require('GenericStorage')
+const Contract = artifacts.require('Storage')
 
 
 contract('Storage', (accounts) => {

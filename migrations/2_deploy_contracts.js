@@ -1,7 +1,7 @@
 const LoggableExample = artifacts.require("./examples/LoggableExample.sol")
 const SwitchableExample = artifacts.require("./examples/SwitchableExample.sol")
 const RoleBasedExample = artifacts.require("./examples/RoleBasedExample.sol")
-const Storage = artifacts.require("./GenericStorage.sol")
+const Storage = artifacts.require("./storage/Storage.sol")
 const Bank = artifacts.require("./financial/Bank.sol")
 
 const nominator = "0x1"

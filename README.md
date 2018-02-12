@@ -8,7 +8,7 @@ A collection of solid smart contracts and libraries for Solidity
 * Loggable
 * Validating
 * Math
-* GenericStorage
+* Storage (and its components GenericStorage & GenericArrayStorage)
 * financial: Bank & Accountant
 
 
