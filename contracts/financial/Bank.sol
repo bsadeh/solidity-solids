@@ -1,10 +1,10 @@
 pragma solidity ^0.4.18;
 
-import '../external/Token.sol';
-import '../Switchable.sol';
-import '../HasOwners.sol';
+import "../external/Token.sol";
+import "../Switchable.sol";
+import "../HasOwners.sol";
 import "./HasBankers.sol";
-import './Accountant.sol';
+import "./Accountant.sol";
 
 
 /*

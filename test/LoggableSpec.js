@@ -1,4 +1,4 @@
-const { extractEvents } = require('./web3_provider_help')
+import { extractEvents } from './web3_provider_help'
 
 const Contract = artifacts.require("LoggableExample")
 

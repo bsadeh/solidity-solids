@@ -1,6 +1,6 @@
 pragma solidity ^0.4.18;
 
-import '../Validating.sol';
+import "../Validating.sol";
 import "./HasBankers.sol";
 
 /*

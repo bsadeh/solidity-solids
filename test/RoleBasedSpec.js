@@ -1,5 +1,5 @@
-const expect = require('expect.js')
-const { isRevertException } = require('./web3_provider_help')
+import expect from 'expect.js'
+import { isRevertException } from './web3_provider_help'
 
 const Contract = artifacts.require('RoleBasedExample')
 

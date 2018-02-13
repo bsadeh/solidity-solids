@@ -1,5 +1,5 @@
-const { List } = require('immutable')
-const { extractEvents, isRevertException, mineUpTo } = require('../web3_provider_help')
+import { List } from 'immutable'
+import { extractEvents, isRevertException } from '../web3_provider_help'
 
 const Contract = artifacts.require('Bank')
 const ERC20Token = artifacts.require('HumanStandardToken')

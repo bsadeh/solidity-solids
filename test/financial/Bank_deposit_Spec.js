@@ -1,6 +1,6 @@
-const expect = require('expect.js')
-const { List } = require('immutable')
-const { extractEvents, isRevertException } = require('../web3_provider_help')
+import expect from 'expect.js'
+import { List } from 'immutable'
+import { extractEvents, isRevertException } from '../web3_provider_help'
 
 const Contract = artifacts.require('Bank')
 const ERC20Token = artifacts.require('HumanStandardToken')
