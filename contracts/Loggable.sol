@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.19;
 
 
 /* a general purpose event publish, intended to be mixed-in */
@@ -9,7 +9,7 @@ contract Loggable {
   Level public level = Level.none;
 
   function levelString() public constant returns (string result) {
-    var _level_ = uint(level);
+    uint _level_ = uint(level);
     if (0 == _level_) return "trace";
     if (1 == _level_) return "debug";
     if (2 == _level_) return "info";
@@ -43,7 +43,7 @@ contract Loggable {
   function fatal(string _message) public { if (level <= Level.fatal) log(Level.fatal, _message); }
 
   function log(Level _level, string _message) private {
-    Log(_level, now, _message);
+    emit Log(_level, now, _message);
   }
   event Log(Level indexed level, uint time, string message);
 }

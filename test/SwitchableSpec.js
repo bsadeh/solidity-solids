@@ -1,8 +1,8 @@
-import expect from 'expect.js'
-import { isRevertException } from './web3_provider_help'
+import expect from 'expect'
+import {isRevertException} from './help/evm'
+
 
 const Contract = artifacts.require('SwitchableExample')
-
 
 contract('Switchable', ([anyone, nominator, owner]) => {
   let contract
@@ -13,78 +13,78 @@ contract('Switchable', ([anyone, nominator, owner]) => {
   })
 
   it('it is switched on in the beginning', async () => {
-    expect(await contract.getNominators()).to.eql([nominator])
-    expect(await contract.getOwners()).to.eql([owner])
-    assert(await contract.isOn())
+    expect(await contract.getNominators()).toEqual([nominator])
+    expect(await contract.getOwners()).toEqual([owner])
+    expect(await contract.isOn()).toBe(true)
   })
 
   it('can be switched on/off', async () => {
-    assert.isTrue(await contract.isOn())
+    expect(await contract.isOn()).toBe(true)
 
     try {
       await contract.switchOff()
       fail('only owners can switch on/off')
     } catch (e) {
-      assert(isRevertException(e))
+      expect(isRevertException(e)).toBe(true)
     }
     try {
       await contract.switchOff({ from: nominator })
       fail('only owners can switch on/off')
     } catch (e) {
-      assert(isRevertException(e))
+      expect(isRevertException(e)).toBe(true)
     }
-    assert.isTrue(await contract.isOn())
+    expect(await contract.isOn()).toBe(true)
     await contract.switchOff({ from: owner })
-    assert.isFalse(await contract.isOn())
+    expect(await contract.isOn()).toBe(false)
 
     try {
       await contract.switchOn()
       fail('only owners can switch on/off')
     } catch (e) {
-      assert(isRevertException(e))
+      expect(isRevertException(e)).toBe(true)
     }
     try {
       await contract.switchOn({ from: nominator })
       fail('only owners can switch on/off')
     } catch (e) {
-      assert(isRevertException(e))
+      expect(isRevertException(e)).toBe(true)
     }
-    assert.isFalse(await contract.isOn())
+    expect(await contract.isOn()).toBe(false)
 
     await contract.switchOn({ from: owner })
   })
 
   it('can increment only when switched on', async () => {
-    assert.isTrue(await contract.isOn())
+    expect(await contract.isOn()).toBe(true)
 
-    const count = (await contract.counter()).toNumber()
+    const count = await contract.counter().then(_ => _.toNumber())
     await contract.increment()
-    assert((await contract.counter()).toNumber() === count + 1)
+    expect(await contract.counter().then(_ => _.toNumber())).toBe(count + 1)
 
     try {
       await contract.decrement()
       fail('only when switch off')
     } catch (e) {
-      assert((await contract.counter()).toNumber() === count + 1)
+      expect(await contract.counter().then(_ => _.toNumber())).toBe(count + 1)
     }
   })
 
   it('can decrement only when switched off', async () => {
     await contract.switchOff({ from: owner })
-    assert.isFalse(await contract.isOn())
+    expect(await contract.isOn()).toBe(false)
 
     const count = (await contract.counter()).toNumber()
     await contract.decrement()
-    assert((await contract.counter()).toNumber() === count - 1)
+    expect(await contract.counter().then(_ => _.toNumber())).toBe(count - 1)
 
     try {
       await contract.increment()
       fail('only when switch on')
     } catch (e) {
-      assert((await contract.counter()).toNumber() === count - 1)
+      expect(await contract.counter().then(_ => _.toNumber())).toBe(count - 1)
     }
 
     await contract.switchOn({ from: owner })
-    assert.isTrue(await contract.isOn())
+    expect(await contract.isOn()).toBe(true)
   })
 })

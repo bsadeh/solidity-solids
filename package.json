@@ -2,11 +2,6 @@
   "name": "solidity-solids",
   "version": "0.0.1",
   "description": "A collection of solid smart contracts & libraries for Solidity",
-  "scripts": {
-    "lint": "solhint contracts/**/*.sol",
-    "coverage": "./node_modules/.bin/solidity-coverage",
-    "test": "node test.js"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/bsadeh/solidity-solids.git"
@@ -29,9 +24,20 @@
       "source-map-support"
     ]
   },
+  "jest": {
+    "testMatch": [
+      "**/test/**/?(*.)(spec|test|it).js"
+    ]
+  },
+  "scripts": {
+    "solium": "solium -d contracts/",
+    "solhint": "solhint contracts/**/*.sol",
+    "test:coverage": "solidity-coverage",
+    "test": "node test.js"
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-plugin-source-map-support": "^1.0.0",
+    "babel-plugin-source-map-support": "^2.0.1",
     "babel-polyfill": "^6.26.0",
     "babel-preset-node8": "^1.2.0",
     "ethereumjs-abi": "^0.6.5",
@@ -43,10 +49,16 @@
     "expect.js": "^0.3.1",
     "ganache-cli": "^6.0.3",
     "immutable": "^3.8.2",
+    "jest": "^22.3.0",
+    "jest-immutable-matchers": "^2.0.1",
     "solhint": "^1.1.10",
+    "solidity-coverage": "^0.4.15",
+    "solium": "^1.1.6",
     "source-map-support": "^0.5.3",
     "truffle": "^4.0.6",
-    "truffle-hdwallet-provider": "0.0.3"
+    "truffle-flattener": "^1.2.5",
+    "truffle-hdwallet-provider": "0.0.3",
+    "web3": "^1.0.0-beta.33"
   },
   "dependencies": {}
 }

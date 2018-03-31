@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.19;
 
 
 /* using a master switch, allowing to switch functionality on/off */
@@ -14,9 +14,9 @@ contract Switchable {
   modifier whenOn() { require(isOn); _; }
   modifier whenOff() { require(!isOn); _; }
 
-  function switchOn() onlyOwner external { if (!isOn) { isOn = true; On(); } }
+  function switchOn() onlyOwner external { if (!isOn) { isOn = true; emit On(); } }
   event On();
 
-  function switchOff() onlyOwner external { if (isOn) { isOn = false; Off(); } }
+  function switchOff() onlyOwner external { if (isOn) { isOn = false; emit Off(); } }
   event Off();
 }

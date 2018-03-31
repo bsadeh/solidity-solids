@@ -1,7 +1,10 @@
 .DS_Store
 .idea/
-*.log
-logs/
+node_modules/
+lib/
+dist/
 build/
 coverage/
-node_modules/
+logs/
+*.log
+test-results.xml

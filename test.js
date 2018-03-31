@@ -1,8 +1,16 @@
 const child_process = require('child_process')
 const process = require('process')
-const blockchain = require("ganache-cli")
+const ganache = require("ganache-cli")
+const secrets = require('./test/secrets')
+const { networks } = require('./truffle')
 
-blockchain.server().listen(8545)
+const options = {
+  mnemonic: secrets.mnemonic,
+  debug: true,
+  // logger: console,
+  port: networks.development.port,
+}
+ganache.server(options).listen(networks.development.port)
 
 const truffle = child_process.spawn('truffle', ['test'])
 truffle.stdout.on('data', (data) => process.stdout.write(data.toString()))

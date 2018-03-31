@@ -1,5 +1,8 @@
-import { List } from 'immutable'
-import { extractEvents, isRevertException } from '../web3_provider_help'
+import expect from 'expect'
+import {List} from 'immutable'
+import {web3} from '../help/web3'
+import {extractEvents, isRevertException} from '../help/evm'
+
 
 const Contract = artifacts.require('Bank')
 const ERC20Token = artifacts.require('HumanStandardToken')
@@ -24,93 +27,92 @@ contract('[Bank > withdraw]', ([, nominator, owner, banker, accountA, accountB])
   })
 
   it('enables banker to withdraw ether for an account', async () => {
-    (await Promise.all([accountA, accountB].map(account =>
-      contract.balanceOf(account, ETH)
-    ))).forEach(each => assert(each.toNumber() === 10))
-    assert(web3.eth.getBalance(contract.address).toNumber() === 20)
+    await Promise.all([accountA, accountB].
+      map(account => contract.balanceOf(account, ETH).then(_ => _.toNumber()).then(_ => expect(_).toBe(10))))
+    expect(await web3.eth.getBalance(contract.address)).toEqual('20')
 
     await contract.withdrawEther(accountA, 2, { from: banker }).then(result => {
       const events = extractEvents('Withdraw', result)
       const withdraw = events[0]
       assert.lengthOf(events, 1)
-      assert(withdraw.coin === ETH)
-      assert(withdraw.account === accountA)
-      assert(withdraw.quantity.toNumber() === 2)
-      assert(withdraw.balance.toNumber() === 10 - 2)
+      expect(withdraw.coin).toBe(ETH)
+      expect(withdraw.account).toBe(accountA)
+      expect(withdraw.quantity.toNumber()).toBe(2)
+      expect(withdraw.balance.toNumber()).toBe(10 - 2)
     })
-    assert(web3.eth.getBalance(contract.address).toNumber() === 20 - 2)
-    assert((await contract.balanceOf(accountA, ETH)).toNumber() === 10 - 2)
-    assert((await contract.balanceOf(accountB, ETH)).toNumber() === 10)
+    expect(await web3.eth.getBalance(contract.address)).toEqual((20 - 2).toString())
+    expect(await contract.balanceOf(accountA, ETH).then(_ => _.toNumber())).toBe(10 - 2)
+    expect(await contract.balanceOf(accountB, ETH).then(_ => _.toNumber())).toBe(10)
 
     await contract.withdrawEther(accountA, 3, { from: banker })
     await contract.withdrawEther(accountB, 4, { from: banker })
-    assert(web3.eth.getBalance(contract.address).toNumber() === 20 - (2 + 3 + 4))
-    assert((await contract.balanceOf(accountA, ETH)).toNumber() === 10 - (2 + 3))
-    assert((await contract.balanceOf(accountB, ETH)).toNumber() === 10 - 4)
+    expect(await web3.eth.getBalance(contract.address)).toEqual((20 - (2 + 3 + 4)).toString())
+    expect(await contract.balanceOf(accountA, ETH).then(_ => _.toNumber())).toBe(10 - (2 + 3))
+    expect(await contract.balanceOf(accountB, ETH).then(_ => _.toNumber())).toBe(10 - 4)
   })
 
   it('enables banker to withdraw coins for an account', async () => {
     (await Promise.all(List.of(accountA, accountB).flatMap(account => List.of(coinA, coinB).map(coin =>
-      contract.balanceOf(account, coin.address)
-    )))).forEach(each => assert(each.toNumber() === 100))
+      contract.balanceOf(account, coin.address).then(_ => _.toNumber())
+    )))).forEach(_ => expect(_).toBe(100))
 
     await contract.withdrawToken(accountA, coinA.address, 20, { from: banker }).then(result => {
       const events = extractEvents('Withdraw', result)
       const withdraw = events[0]
       assert.lengthOf(events, 1)
-      assert(withdraw.coin === coinA.address)
-      assert(withdraw.account === accountA)
-      assert(withdraw.quantity.toNumber() === 20)
-      assert(withdraw.balance.toNumber() === 100 - 20)
+      expect(withdraw.coin).toBe(coinA.address)
+      expect(withdraw.account).toBe(accountA)
+      expect(withdraw.quantity.toNumber()).toBe(20)
+      expect(withdraw.balance.toNumber()).toBe(100 - 20)
     })
-    assert((await contract.balanceOf(accountA, coinA.address)).toNumber() === 100 - 20)
-    assert((await contract.balanceOf(accountB, coinA.address)).toNumber() === 100)
-    assert((await contract.balanceOf(accountA, coinB.address)).toNumber() === 100)
-    assert((await contract.balanceOf(accountB, coinB.address)).toNumber() === 100)
+    expect(await contract.balanceOf(accountA, coinA.address).then(_ => _.toNumber())).toBe(100 - 20)
+    expect(await contract.balanceOf(accountB, coinA.address).then(_ => _.toNumber())).toBe(100)
+    expect(await contract.balanceOf(accountA, coinB.address).then(_ => _.toNumber())).toBe(100)
+    expect(await contract.balanceOf(accountB, coinB.address).then(_ => _.toNumber())).toBe(100)
 
     await contract.withdrawToken(accountA, coinA.address, 30, { from: banker })
     await contract.withdrawToken(accountA, coinB.address, 40, { from: banker })
     await contract.withdrawToken(accountB, coinB.address, 90, { from: banker })
-    assert((await contract.balanceOf(accountA, coinA.address)).toNumber() === 100 - (20 + 30))
-    assert((await contract.balanceOf(accountB, coinA.address)).toNumber() === 100)
-    assert((await contract.balanceOf(accountA, coinB.address)).toNumber() === 100 - 40)
-    assert((await contract.balanceOf(accountB, coinB.address)).toNumber() === 100 - 90)
+    expect(await contract.balanceOf(accountA, coinA.address).then(_ => _.toNumber())).toBe(100 - (20 + 30))
+    expect(await contract.balanceOf(accountB, coinA.address).then(_ => _.toNumber())).toBe(100)
+    expect(await contract.balanceOf(accountA, coinB.address).then(_ => _.toNumber())).toBe(100 - 40)
+    expect(await contract.balanceOf(accountB, coinB.address).then(_ => _.toNumber())).toBe(100 - 90)
   })
 
   it('prevents using withdrawToken to withdraw ether', async () => {
-    const accountEtherBalance = await contract.balanceOf(accountA, ETH)
-    const contractEtherBalance = web3.eth.getBalance(contract.address)
+    // const accountEtherBalance = await contract.balanceOf(accountA, ETH).then(_ => _.toNumber())
+    const contractEtherBalance = await web3.eth.getBalance(contract.address)
     try {
       await contract.withdrawToken(accountA, ETH, 1, { from: banker })
       fail('withdrawToken to withdraw ether; no can do!')
     } catch (e) {
-      assert(isRevertException(e))
-      assert((await contract.balanceOf(accountA, ETH)).toNumber() === accountEtherBalance.toNumber())
-      assert(web3.eth.getBalance(contract.address).toNumber() === contractEtherBalance.toNumber())
+      expect(isRevertException(e)).toBe(true)
+      // expect(await contract.balanceOf(accountA, ETH).then(_ => _.toNumber())).toBe(accountEtherBalance)
+      expect(await web3.eth.getBalance(contract.address)).toEqual(contractEtherBalance)
     }
   })
 
   it('prevents banker from withdrawing for an account when contract is switched off', async () => {
     await contract.switchOff({ from: owner })
 
-    const etherBalance = (await contract.balanceOf(accountA, ETH)).toNumber()
-    assert(etherBalance > 0)
+    const etherBalance = await contract.balanceOf(accountA, ETH).then(_ => _.toNumber())
+    expect(etherBalance > 0).toBe(true)
     try {
       await contract.withdrawEther(accountA, etherBalance, { from: banker })
       fail('closed for withdrawal')
     } catch (e) {
-      assert(isRevertException(e))
-      assert((await contract.balanceOf(accountA, ETH)).toNumber() === etherBalance)
+      expect(isRevertException(e)).toBe(true)
+      expect(await contract.balanceOf(accountA, ETH).then(_ => _.toNumber())).toBe(etherBalance)
     }
 
-    const coinBalance = (await contract.balanceOf(accountA, coinA.address)).toNumber()
-    assert(coinBalance > 0)
+    const coinBalance = await contract.balanceOf(accountA, coinA.address).then(_ => _.toNumber())
+    expect(coinBalance > 0).toBe(true)
     try {
       await contract.withdrawToken(accountA, coinA.address, coinBalance, { from: banker })
       fail('closed for withdrawal')
     } catch (e) {
-      assert(isRevertException(e))
-      assert((await contract.balanceOf(accountA, coinA.address)).toNumber() === coinBalance)
+      expect(isRevertException(e)).toBe(true)
+      expect(await contract.balanceOf(accountA, coinA.address).then(_ => _.toNumber())).toBe(coinBalance)
     }
 
     await contract.switchOn({ from: owner })
