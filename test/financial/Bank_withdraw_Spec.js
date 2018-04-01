@@ -80,14 +80,14 @@ contract('[Bank > withdraw]', ([, nominator, owner, banker, accountA, accountB])
   })
 
   it('prevents using withdrawToken to withdraw ether', async () => {
-    // const accountEtherBalance = await contract.balanceOf(accountA, ETH).then(_ => _.toNumber())
+    const accountEtherBalance = await web3.eth.getBalance(accountA)
     const contractEtherBalance = await web3.eth.getBalance(contract.address)
     try {
       await contract.withdrawToken(accountA, ETH, 1, { from: banker })
       fail('withdrawToken to withdraw ether; no can do!')
     } catch (e) {
       expect(isRevertException(e)).toBe(true)
-      // expect(await contract.balanceOf(accountA, ETH).then(_ => _.toNumber())).toBe(accountEtherBalance)
+      expect(await web3.eth.getBalance(accountA)).toEqual(accountEtherBalance)
       expect(await web3.eth.getBalance(contract.address)).toEqual(contractEtherBalance)
     }
   })
