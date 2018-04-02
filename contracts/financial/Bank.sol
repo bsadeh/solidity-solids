@@ -31,7 +31,7 @@ contract Bank is Switchable, HasOwners, HasBankers, Accountant {
 
   function deposit(address account, address coin, uint quantity) private {
     credit(account, coin, quantity);
-    emit Deposit(account, coin, quantity, balanceOf(account, coin));
+    Deposit(account, coin, quantity, balanceOf(account, coin));
   }
   event Deposit(address account, address coin, uint quantity, uint balance);
 
@@ -41,7 +41,7 @@ contract Bank is Switchable, HasOwners, HasBankers, Accountant {
   function withdraw(address account, address coin, uint quantity) private {
     debit(account, coin, quantity);
     require(isToken(coin) ? Token(coin).transfer(account, quantity) : msg.sender.send(quantity));
-    emit Withdraw(account, coin, quantity, balanceOf(account, coin));
+    Withdraw(account, coin, quantity, balanceOf(account, coin));
   }
   event Withdraw(address account, address coin, uint quantity, uint balance);
 }

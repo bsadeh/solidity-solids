@@ -39,7 +39,7 @@ contract RoleBased {
   function _addPlayer_(string role, address player) private {
     roles[role][player] = true;
     players[role].push(player);
-    emit AddedPlayer(role, player);
+    AddedPlayer(role, player);
   }
   event AddedPlayer(string role, address indexed player);
 
@@ -55,7 +55,7 @@ contract RoleBased {
         }
       }
       players[role].length -= 1;
-      emit RemovedPlayer(role, player);
+      RemovedPlayer(role, player);
     }
   }
   event RemovedPlayer(string role, address indexed player);

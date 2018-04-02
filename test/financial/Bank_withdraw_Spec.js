@@ -7,7 +7,7 @@ import {extractEvents, isRevertException} from '../help/evm'
 const Contract = artifacts.require('Bank')
 const ERC20Token = artifacts.require('HumanStandardToken')
 
-contract.skip('[Bank > withdraw]', ([, nominator, owner, banker, accountA, accountB]) => {
+contract('[Bank > withdraw]', ([, nominator, owner, banker, accountA, accountB]) => {
   const ETH = '0x0000000000000000000000000000000000000000'
   let contract, coinA, coinB
 
