@@ -1,4 +1,4 @@
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.21;
 
 import "../external/Token.sol";
 import "../Switchable.sol";
@@ -31,7 +31,7 @@ contract Bank is Switchable, HasOwners, HasBankers, Accountant {
 
   function deposit(address account, address coin, uint quantity) private {
     credit(account, coin, quantity);
-    Deposit(account, coin, quantity, balanceOf(account, coin));
+    emit Deposit(account, coin, quantity, balanceOf(account, coin));
   }
   event Deposit(address account, address coin, uint quantity, uint balance);
 
@@ -41,7 +41,7 @@ contract Bank is Switchable, HasOwners, HasBankers, Accountant {
   function withdraw(address account, address coin, uint quantity) private {
     debit(account, coin, quantity);
     require(isToken(coin) ? Token(coin).transfer(account, quantity) : msg.sender.send(quantity));
-    Withdraw(account, coin, quantity, balanceOf(account, coin));
+    emit Withdraw(account, coin, quantity, balanceOf(account, coin));
   }
   event Withdraw(address account, address coin, uint quantity, uint balance);
 }

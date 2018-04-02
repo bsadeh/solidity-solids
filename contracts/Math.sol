@@ -1,4 +1,4 @@
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.21;
 
 
 /* Math provides arithmetic functions for uint type pairs.
