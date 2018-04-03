@@ -1,6 +1,6 @@
 import expect from 'expect'
 import {List} from 'immutable'
-import {web3} from '../help/web3'
+import {getBalance} from '../help/web3'
 import {extractEvents, isRevertException} from '../help/evm'
 
 
@@ -29,7 +29,7 @@ contract('[Bank > withdraw]', ([, nominator, owner, banker, accountA, accountB])
   it('enables banker to withdraw ether for an account', async () => {
     await Promise.all([accountA, accountB].
       map(account => contract.balanceOf(account, ETH).then(_ => _.toNumber()).then(_ => expect(_).toBe(10))))
-    expect(await web3.eth.getBalance(contract.address)).toEqual('20')
+    expect(await getBalance(contract.address)).toEqual(20)
 
     await contract.withdrawEther(accountA, 2, { from: banker }).then(result => {
       const events = extractEvents('Withdraw', result)
@@ -40,13 +40,13 @@ contract('[Bank > withdraw]', ([, nominator, owner, banker, accountA, accountB])
       expect(withdraw.quantity.toNumber()).toBe(2)
       expect(withdraw.balance.toNumber()).toBe(10 - 2)
     })
-    expect(await web3.eth.getBalance(contract.address)).toEqual((20 - 2).toString())
+    expect(await getBalance(contract.address)).toEqual(20 - 2)
     expect(await contract.balanceOf(accountA, ETH).then(_ => _.toNumber())).toBe(10 - 2)
     expect(await contract.balanceOf(accountB, ETH).then(_ => _.toNumber())).toBe(10)
 
     await contract.withdrawEther(accountA, 3, { from: banker })
     await contract.withdrawEther(accountB, 4, { from: banker })
-    expect(await web3.eth.getBalance(contract.address)).toEqual((20 - (2 + 3 + 4)).toString())
+    expect(await getBalance(contract.address)).toEqual(20 - (2 + 3 + 4))
     expect(await contract.balanceOf(accountA, ETH).then(_ => _.toNumber())).toBe(10 - (2 + 3))
     expect(await contract.balanceOf(accountB, ETH).then(_ => _.toNumber())).toBe(10 - 4)
   })
@@ -80,15 +80,15 @@ contract('[Bank > withdraw]', ([, nominator, owner, banker, accountA, accountB])
   })
 
   it('prevents using withdrawToken to withdraw ether', async () => {
-    const accountEtherBalance = await web3.eth.getBalance(accountA)
-    const contractEtherBalance = await web3.eth.getBalance(contract.address)
+    const accountEtherBalance = await getBalance(accountA)
+    const contractEtherBalance = await getBalance(contract.address)
     try {
       await contract.withdrawToken(accountA, ETH, 1, { from: banker })
       fail('withdrawToken to withdraw ether; no can do!')
     } catch (e) {
       expect(isRevertException(e)).toBe(true)
-      expect(await web3.eth.getBalance(accountA)).toEqual(accountEtherBalance)
-      expect(await web3.eth.getBalance(contract.address)).toEqual(contractEtherBalance)
+      expect(await getBalance(accountA)).toEqual(accountEtherBalance)
+      expect(await getBalance(contract.address)).toEqual(contractEtherBalance)
     }
   })
 

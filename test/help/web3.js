@@ -5,6 +5,8 @@ import Web3 from 'web3'
 export let web3
 web3 = new Web3(typeof web3 === 'undefined' ? new Web3.providers.HttpProvider('http://localhost:8545') : web3.currentProvider)
 
+export const getBalance = (address) => web3.eth.getBalance(address).then(_ => parseInt(_))
+
 export const toBuffer = (value) => ethUtil.toBuffer(value)
 export const bufferToHex = (...buffers) => ethUtil.bufferToHex(Buffer.concat(buffers))
 

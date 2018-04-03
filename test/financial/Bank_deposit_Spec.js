@@ -1,5 +1,5 @@
 import expect from 'expect'
-import {web3} from '../help/web3'
+import {getBalance} from '../help/web3'
 import {extractEvents, isRevertException} from '../help/evm'
 
 
@@ -29,7 +29,7 @@ contract('[Bank > deposit]', ([, nominator, owner, banker, accountA, accountB, a
     await Promise.all([contract.address, coinA.address, coinB.address].
       map(_ => coinA.balanceOf(_).then(_ => _.toNumber()).then(_ => expect(_).toBe(0))))
     await Promise.all([accountA, accountB, accountAB].
-      map(_ => web3.eth.getBalance(_).then(x => expect(x > 1e+19).toBe(true))))
+      map(_ => getBalance(_).then(x => expect(x > 1e+19).toBe(true))))
     expect(await Promise.all([accountA, accountB, accountAB].
       map(_ => coinA.balanceOf(_).then(_ => _.toNumber())))).toEqual([1000, 0, 1000])
     expect(await Promise.all([accountA, accountB, accountAB].
@@ -46,7 +46,7 @@ contract('[Bank > deposit]', ([, nominator, owner, banker, accountA, accountB, a
       expect(deposit.quantity.toNumber()).toBe(2)
       expect(deposit.balance.toNumber()).toBe(2)
     })
-    expect(await web3.eth.getBalance(contract.address)).toEqual('2')
+    expect(await getBalance(contract.address)).toEqual(2)
     expect(await contract.balanceOf(accountA, ETH).then(_ => _.toNumber())).toBe(2)
   })
 
@@ -60,13 +60,13 @@ contract('[Bank > deposit]', ([, nominator, owner, banker, accountA, accountB, a
       expect(deposit.quantity.toNumber()).toBe(2)
       expect(deposit.balance.toNumber()).toBe(2)
     })
-    expect(await web3.eth.getBalance(contract.address)).toEqual('2')
+    expect(await getBalance(contract.address)).toEqual(2)
     expect(await contract.balanceOf(accountA, ETH).then(_ => _.toNumber())).toBe(2)
 
     await contract.depositEther({ value: 10, from: accountB })
     await contract.depositEther({ value: 2, from: accountAB })
     await contract.depositEther({ value: 3, from: accountAB })
-    expect(await web3.eth.getBalance(contract.address)).toEqual('17')
+    expect(await getBalance(contract.address)).toEqual(17)
 
     await contract.depositEther({ value: 4, from: accountB }).then(result => {
       const events = extractEvents('Deposit', result)
@@ -77,7 +77,7 @@ contract('[Bank > deposit]', ([, nominator, owner, banker, accountA, accountB, a
       expect(deposit.quantity.toNumber()).toBe(4)
       expect(deposit.balance.toNumber()).toBe(14)
     })
-    expect(await web3.eth.getBalance(contract.address)).toEqual('21')
+    expect(await getBalance(contract.address)).toEqual(21)
     expect(await contract.balanceOf(accountA, ETH).then(_ => _.toNumber())).toBe(2)
     expect(await contract.balanceOf(accountB, ETH).then(_ => _.toNumber())).toBe(14)
     expect(await contract.balanceOf(accountAB, ETH).then(_ => _.toNumber())).toBe(5)
@@ -115,14 +115,14 @@ contract('[Bank > deposit]', ([, nominator, owner, banker, accountA, accountB, a
 
   it('prevents using depositToken to deposit ether', async () => {
     const accountEtherBalance = await contract.balanceOf(accountA, ETH).then(_ => _.toNumber())
-    const contractEtherBalance = await web3.eth.getBalance(contract.address)
+    const contractEtherBalance = await getBalance(contract.address)
     try {
       await contract.depositToken(ETH, 1, { from: accountA })
       fail('depositToken to deposit ether; no can do!')
     } catch (e) {
       expect(isRevertException(e)).toBe(true)
       expect(await contract.balanceOf(accountA, ETH).then(_ => _.toNumber())).toBe(accountEtherBalance)
-      expect(await web3.eth.getBalance(contract.address)).toEqual(contractEtherBalance)
+      expect(await getBalance(contract.address)).toEqual(contractEtherBalance)
     }
   })
 })
