@@ -1,44 +1,53 @@
 import {Map} from 'immutable'
-import {web3} from './web3'
+import {uint, web3} from './web3'
+import {throwEvmException} from './evm.pseudo'
 
 
-export class ERC20Token {
-  balances = Map().asMutable()
-  allowed = Map().asMutable()
+const zero = uint(0)
 
-  constructor(initialAmount, tokenName, decimalUnits, tokenSymbol) {
-    this.initialAmount = initialAmount
-    this.tokenName = tokenName
-    this.decimalUnits = decimalUnits
-    this.tokenSymbol = tokenSymbol
-    this._address = web3.utils.randomHex(20)
+export default class ERC20Token {
+  static get(address) {
+    if (!tokens.get(address)) throwEvmException('revert')
+    return tokens.get(address)
   }
 
-  get address() { return this._address}
+  constructor(initialAmount, tokenName, decimalUnits, tokenSymbol) {
+    this.initialAmount = uint(initialAmount)
+    this.tokenName = tokenName
+    this.decimalUnits = uint(decimalUnits)
+    this.tokenSymbol = tokenSymbol
+    this.balances = Map().asMutable()
+    this.allowed = Map().asMutable()
+    this.address = web3.utils.randomHex(20)
+    tokens.set(this.address, this)
+  }
 
   transfer(to, value, msg = {})  {
-    this.balances.update(msg.from, 0, x => x - value)
-    this.balances.update(to, 0, x => x + value)
-    return true
+    this.balances.update(msg.from, zero, x => x.sub(value))
+    this.balances.update(to, zero, x => x.add(value))
+    return Promise.resolve(true)
   }
 
   transferFrom(from, to, value, msg = {}) {
-    this.balances.update(to, 0, x => x + value)
-    this.balances.update(from, 0, x => x - value)
-    this.allowed.updateIn([from, msg.from], 0, x => x - value)
-    return true
+    this.balances.update(to, zero, x => x.add(value))
+    this.balances.update(from, zero, x => x.sub(value))
+    this.allowed.updateIn([from, msg.from], zero, x => x.sub(value))
+    return Promise.resolve(true)
   }
 
   balanceOf(owner) {
-    return this.balances.get(owner, 0)
+    const value = this.balances.get(owner, zero)
+    return Promise.resolve(value)
   }
 
   approve(spender, value, msg = {}) {
     this.allowed.setIn([msg.from, spender], value)
-    return true
+    return Promise.resolve(true)
   }
 
   allowance(owner, spender) {
-    return this.allowed.getIn([owner, spender], 0)
+    const value = this.allowed.getIn([owner, spender], zero)
+    return Promise.resolve(value)
   }
 }
+const tokens = Map().asMutable()

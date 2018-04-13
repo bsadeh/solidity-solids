@@ -14,7 +14,7 @@ export const mine = (howManyBlocks) => { for (let i = 0; i < howManyBlocks; i++)
 
 const eth = new EthRPC(new HttpProvider('http://localhost:8545'))
 const mine1 = () => eth.sendAsync({ method: 'evm_mine' })
-export const increaseTime = (time) => eth.sendAsync({ method: 'evm_increaseTime', params: [time] })
+export const increaseTime = (time) => eth.sendAsync({ method: 'evm_increaseTime', params: [time.toNumber()] })
 export const snapshot = () => eth.sendAsync({ method: 'evm_snapshot', params: [] })
 export const revert = (snapshotId) => eth.sendAsync({ method: 'evm_revert', params: [snapshotId] })
 
@@ -25,17 +25,9 @@ export const isInvalidOpcodeException = (e) => isEvmExceptionTagged(e, 'invalid 
 
 export const extractEvents = (name, result) => result.logs.filter(x => x.event === name).map(x => x.args)
 
-/* returns the time of the last mined block in seconds */
-export const latestTime = () => web3.eth.getBlock('latest').timestamp
+export const getBlockNumber = () => web3.eth.getBlockNumber()
+export const getBlockTimestamp = () => web3.eth.getBlockNumber().then(_ => web3.eth.getBlock(_)).then(_ => _.timestamp)
 
-
-// const SolidityEvent = require('web3/lib/web3/event.js')
-// export const decodeLogs = (logs, contract, address) => {
-//   return logs.map(each => {
-//     const event = new SolidityEvent(null, contract.events[each.topics[0]], address)
-//     return event.decode(each)
-//   })
-// }
 
 /* Hash and add same prefix to the hash that testrpc use */
 export const hashMessage = (message) => {

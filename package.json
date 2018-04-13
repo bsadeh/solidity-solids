@@ -1,6 +1,6 @@
 {
   "name": "solidity-solids",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A collection of solid smart contracts & libraries for Solidity",
   "repository": {
     "type": "git",
@@ -40,11 +40,8 @@
     "babel-plugin-source-map-support": "^2.0.1",
     "babel-polyfill": "^6.26.0",
     "babel-preset-node8": "^1.2.0",
-    "ethereumjs-abi": "^0.6.5",
-    "ethereumjs-wallet": "^0.6.0",
-    "ethjs-contract": "^0.1.9",
+    "eth-lib": "^0.2.8",
     "ethjs-provider-http": "^0.1.6",
-    "ethjs-query": "^0.3.3",
     "ethjs-rpc": "^0.1.8",
     "expect.js": "^0.3.1",
     "ganache-cli": "^6.1.0",

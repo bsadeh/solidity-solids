@@ -1,6 +1,6 @@
 {
-  "package_name": "solids",
-  "version": "0.0.1",
+  "package_name": "solidity-solids",
+  "version": "0.1.0",
   "description": "A collection of solid smart contracts & libraries for Solidity",
   "authors": [
     "Benny Sadeh <benny.sadeh@gmail.com>"
