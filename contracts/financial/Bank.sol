@@ -1,4 +1,4 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.23;
 
 import "../external/Token.sol";
 import "../Switchable.sol";
@@ -15,7 +15,7 @@ contract Bank is Switchable, HasOwners, HasBankers, Accountant {
   string public constant version = "1.0.0";
   address internal constant ETH = address(0x0); // a hack to allow tracking ether deposit/withdrawal
 
-  function Bank(address nominator) HasOwners(nominator) HasBankers(nominator) public { }
+  constructor(address nominator) HasOwners(nominator) HasBankers(nominator) public { }
 
   modifier validToken(address value) { require(isToken(value)); _; }
   function isToken(address value) pure private returns (bool) { return value != ETH; }

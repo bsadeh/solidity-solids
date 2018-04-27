@@ -1,5 +1,5 @@
 import {List, Map} from 'immutable'
-import {toBN, uint} from './web3'
+import {uint} from './web3'
 
 
 const zero = uint(0)
@@ -17,20 +17,23 @@ export const getBlockNumber = () => Promise.resolve(blocks.number)
 export const getBlockTimestamp = () => Promise.resolve(blocks.timestamp)
 
 class EtherWallet {
-  balances = Map().asMutable()
+  constructor() {
+    this.balances = Map().asMutable()
+  }
   get(address) { return this.balances.get(address, zero) }
   set(address, value) { this.balances.set(address, value) }
   add(value, address) { this.balances.update(address, zero, x => x.add(value)) }
   deduct(value, address) { this.balances.update(address, zero, x => x.sub(value)) }
-  transfer(value, from, to) {
+  transfer(v, from, to) {
+    const value = uint(v)
     if (this.get(from).lt(value)) throw Error(`insufficient ETH for address ${from}`)
     this.deduct(value, from)
     this.add(value, to)
-    return true
+    return Promise.resolve(true)
   }
   bootstrap(accounts = []) {
     this.balances.clear()
-    accounts.forEach(_ => this.set(_, toBN(1e+20)))
+    accounts.forEach(_ => this.set(_, uint(1e+20)))
   }
 }
 export const wallet = new EtherWallet()
@@ -44,7 +47,8 @@ export const mineUpTo = async (blockNumber) => {
 }
 export const mine = (howManyBlocks) => blocks.advanceBlocks(howManyBlocks)
 
-export const increaseTime = (time) => {
+export const increaseTime = (t) => {
+  const time = uint(t)
   if (time.lt(blocks.timestamp)) throw Error(`time ${time.toString(10)} is in the past (it's currently ${blocks.timestamp.toString(10)})`)
   blocks.advanceTime(time)
 }

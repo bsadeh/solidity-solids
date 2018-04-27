@@ -1,5 +1,4 @@
-require("source-map-support").install()
-require("babel-register")()
+require('@babel/register')
 
 const { mnemonic } = require('./test/secrets')
 const HDWalletProvider = require('truffle-hdwallet-provider')

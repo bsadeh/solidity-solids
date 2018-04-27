@@ -1,4 +1,4 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.23;
 
 import "../RoleBased.sol";
 
@@ -7,7 +7,7 @@ import "../RoleBased.sol";
 contract HasReaders is RoleBased {
   string constant private reader = "reader";
 
-  function HasReaders(address nominator) RoleBased(nominator) public { }
+  constructor(address nominator) RoleBased(nominator) public { }
 
   modifier onlyReader { require(isReader(msg.sender)); _; }
   function isReader(address subject) public constant returns (bool) { return isPlayer(reader, subject); }

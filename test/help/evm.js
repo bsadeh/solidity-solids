@@ -2,6 +2,7 @@ import HttpProvider from 'ethjs-provider-http'
 import EthRPC from 'ethjs-rpc'
 import {keccak256, toBuffer, web3} from './web3'
 
+export const getBalance = (address) => web3.eth.getBalance(address).then(_ => parseInt(_))
 
 export const mineUpTo = async (blockNumber) => {
   const current = await web3.eth.getBlockNumber()

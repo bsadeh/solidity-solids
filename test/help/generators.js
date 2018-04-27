@@ -1,5 +1,5 @@
 import uuid from 'uuid'
-import {uint} from './web3'
+import {web3} from './web3'
 
 
 export class TimestampGenerator {
@@ -7,10 +7,12 @@ export class TimestampGenerator {
 }
 
 export class NumberGenerator {
-  counter = 0
-  next() { return ++this.counter }
+  constructor(start = 0) {
+    this.current = start
+  }
+  next() { return ++this.current }
 }
 
 export class UuidGenerator {
-  next() { return uint(uuid.v1()) }
+  next() { return new web3.utils.BN(uuid.v1()) }
 }

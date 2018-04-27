@@ -1,17 +1,19 @@
 import expect from 'expect'
 import {List} from 'immutable'
-import {getBalance} from '../help/web3'
+import {getBalance} from '../help/evm'
+import {ETH} from '../help/ETH'
 import {extractEvents, isRevertException} from '../help/evm'
+import {sleep} from "../help/global"
 
 
 const Contract = artifacts.require('Bank')
 const ERC20Token = artifacts.require('HumanStandardToken')
 
 contract('[Bank > withdraw]', ([, nominator, owner, banker, accountA, accountB]) => {
-  const ETH = '0x0000000000000000000000000000000000000000'
   let contract, coinA, coinB
 
   beforeEach(async () => {
+    await sleep(1)
     contract = await Contract.new(nominator)
     await contract.addOwner(owner, {from: nominator})
     await contract.addBanker(banker, {from: nominator})

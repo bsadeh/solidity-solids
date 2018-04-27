@@ -1,4 +1,4 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.23;
 
 import "./HasReaders.sol";
 import "./HasWriters.sol";
@@ -12,7 +12,7 @@ import "./HasWriters.sol";
 contract GenericStorage is HasReaders, HasWriters {
   string public constant version = "1.0.0";
 
-  function GenericStorage(address nominator) HasReaders(nominator) HasWriters(nominator) public { }
+  constructor(address nominator) HasReaders(nominator) HasWriters(nominator) public { }
 
   mapping (bytes32 => bool) private boolStore;
   mapping (bytes32 => int) private intStore;

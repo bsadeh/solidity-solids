@@ -1,4 +1,4 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.23;
 
 import "./GenericStorage.sol";
 import "./GenericArrayStorage.sol";
@@ -14,5 +14,5 @@ import "./GenericArrayStorage.sol";
 contract Storage is GenericStorage, GenericArrayStorage {
   string public constant version = "1.0.0";
 
-  function Storage(address nominator) GenericStorage(nominator) GenericArrayStorage(nominator) public { }
+  constructor(address nominator) GenericStorage(nominator) GenericArrayStorage(nominator) public { }
 }

@@ -1,5 +1,7 @@
 import expect from 'expect'
-import {getBalance} from '../help/web3'
+import {getBalance} from '../help/evm'
+import {ETH} from '../help/ETH'
+import {sleep} from '../help/global'
 import {extractEvents, isRevertException} from '../help/evm'
 
 
@@ -7,10 +9,10 @@ const Contract = artifacts.require('Bank')
 const ERC20Token = artifacts.require('HumanStandardToken')
 
 contract('[Bank > deposit]', ([, nominator, owner, banker, accountA, accountB, accountAB]) => {
-  const ETH = '0x0000000000000000000000000000000000000000'
   let contract, coinA, coinB
 
   beforeEach(async () => {
+    await sleep(1)
     contract = await Contract.new(nominator)
     await contract.addOwner(owner, {from: nominator})
     await contract.addBanker(banker, {from: nominator})

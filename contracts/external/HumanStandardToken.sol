@@ -1,4 +1,4 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.23;
 
 import "./StandardToken.sol";
 
@@ -29,7 +29,7 @@ contract HumanStandardToken is StandardToken {
   string public symbol;                 //An identifier: eg SBX
   string public version = "H0.1";       //human 0.1 standard. Just an arbitrary versioning scheme.
 
-  function HumanStandardToken(
+  constructor(
     uint _initialAmount,
     string _tokenName,
     uint8 _decimalUnits,

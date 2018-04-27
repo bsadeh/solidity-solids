@@ -1,4 +1,4 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.23;
 
 
 /*
@@ -13,9 +13,7 @@ contract RoleBased {
   mapping (string => address[]) private players;
 
 
-  function RoleBased(address subject) public {
-    _addPlayer_(nominator, subject);
-  }
+  constructor(address subject) public { _addPlayer_(nominator, subject); }
 
   modifier onlyNominator() { require(isNominator(msg.sender)); _; }
   function isNominator(address subject) public constant returns (bool) { return isPlayer(nominator, subject); }

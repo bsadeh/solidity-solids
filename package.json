@@ -18,45 +18,45 @@
   "homepage": "https://github.com/bsadeh/solidity-solids",
   "babel": {
     "presets": [
-      "node8"
-    ],
-    "plugins": [
-      "source-map-support"
+      ["@babel/preset-env", {"targets": {"node": "current"}}]
     ]
   },
   "jest": {
+    "setupTestFrameworkScriptFile": "./test.jest.js",
     "testMatch": [
       "**/test/**/?(*.)(spec|test|it).js"
     ]
   },
   "scripts": {
+    "build": "babel src -d dist -s",
     "solium": "solium -d contracts/",
     "solhint": "solhint contracts/**/*.sol",
     "test:coverage": "solidity-coverage",
-    "test": "node test.js"
+    "test": "node test.truffle.js"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-plugin-source-map-support": "^2.0.1",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-node8": "^1.2.0",
+    "@babel/cli": "^7.0.0-beta.44",
+    "@babel/core": "^7.0.0-beta.44",
+    "@babel/preset-env": "^7.0.0-beta.44",
+    "@babel/register": "^7.0.0-beta.44",
+    "babel-core": "^7.0.0-bridge.0",
+    "expect.js": "^0.3.1",
+    "ganache-cli": "^6.1.0",
+    "jest": "^22.4.3",
+    "jest-immutable-matchers": "^2.0.1",
+    "solhint": "^1.1.10",
+    "solidity-coverage": "^0.5.0",
+    "solium": "^1.1.5",
+    "truffle": "^4.1.7",
+    "truffle-flattener": "^1.2.5",
+    "truffle-hdwallet-provider": "0.0.3"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.0.0-beta.44",
     "eth-lib": "^0.2.8",
     "ethjs-provider-http": "^0.1.6",
     "ethjs-rpc": "^0.1.8",
-    "expect.js": "^0.3.1",
-    "ganache-cli": "^6.1.0",
     "immutable": "^3.8.2",
-    "jest": "^22.3.0",
-    "jest-immutable-matchers": "^2.0.1",
-    "solc": "^0.4.21",
-    "solhint": "^1.1.10",
-    "solidity-coverage": "^0.4.15",
-    "solium": "^1.1.6",
-    "source-map-support": "^0.5.3",
-    "truffle": "^4.1.5",
-    "truffle-flattener": "^1.2.5",
-    "truffle-hdwallet-provider": "0.0.3",
     "web3": "^1.0.0-beta.33"
-  },
-  "dependencies": {}
+  }
 }

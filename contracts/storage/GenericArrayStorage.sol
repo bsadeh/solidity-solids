@@ -1,4 +1,4 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.23;
 
 import "./HasReaders.sol";
 import "./HasWriters.sol";
@@ -11,7 +11,7 @@ import "./HasWriters.sol";
   some methods are not implemented for string[] & bytes[] types.
 */
 contract GenericArrayStorage is HasReaders, HasWriters {
-  function GenericArrayStorage(address nominator) HasReaders(nominator) HasWriters(nominator) public { }
+  constructor(address nominator) HasReaders(nominator) HasWriters(nominator) public { }
 
   mapping (bytes32 => bool[]) private boolArrayStore;
   mapping (bytes32 => int[]) private intArrayStore;

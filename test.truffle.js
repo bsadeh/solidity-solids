@@ -1,5 +1,3 @@
-"use strict";
-
 const child_process = require('child_process')
 const process = require('process')
 const ganache = require("ganache-cli")
