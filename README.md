@@ -12,16 +12,14 @@ A collection of solid smart contracts and libraries for Solidity
 * financial: Bank & Accountant
 
 
-### Prerequisites:
-
+##### prerequisites
 ```
-truffle 4.1.7
-node 8.9.x
-```
-
-### build
-```
-    npm install
-    npm test
+truffle 4.1.14
+node ^10.12.0
 ```
 
+##### build
+```shell
+$ yarn bootstrap
+$ yarn test
+```

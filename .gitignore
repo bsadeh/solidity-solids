@@ -7,4 +7,5 @@ build/
 coverage/
 logs/
 *.log
+coverage.json
 test-results.xml

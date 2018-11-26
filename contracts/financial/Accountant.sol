@@ -1,14 +1,12 @@
-pragma solidity ^0.4.23;
+pragma solidity 0.4.24;
 
 import "../Validating.sol";
-import "./HasBankers.sol";
 
 /*
   Accountant tracks deposits/withdrawals of funds (ETH or any ERC20 token).
   note that the Accountant does not actually hold the funds!
 */
 contract Accountant is Validating {
-  string public constant version = "1.0.0";
   address internal constant ETH = address(0x0); // a hack to allow tracking ether deposit/withdrawal
 
   /* mapping of coins to mapping of account balances (coin => account => balance) */

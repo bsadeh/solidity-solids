@@ -1,4 +1,4 @@
-pragma solidity ^0.4.23;
+pragma solidity 0.4.24;
 
 
 /*
@@ -7,8 +7,8 @@ pragma solidity ^0.4.23;
 */
 contract Token {
   /* This is a slight change to the ERC20 base standard.
-  function totalSupply() constant returns (uint supply);
-  is replaced with:
+  function totalSupply() view returns (uint supply);
+  is replaced map:
   uint public totalSupply;
   This automatically creates a getter function for the totalSupply.
   This is moved to the base contract since public getter functions are not
@@ -20,7 +20,7 @@ contract Token {
 
   /// @param _owner The address from which the balance will be retrieved
   /// @return The balance
-  function balanceOf(address _owner) public constant returns (uint balance);
+  function balanceOf(address _owner) public view returns (uint balance);
 
   /// @notice send `_value` token to `_to` from `msg.sender`
   /// @param _to The address of the recipient
@@ -44,7 +44,7 @@ contract Token {
   /// @param _owner The address of the account owning tokens
   /// @param _spender The address of the account able to transfer the tokens
   /// @return Amount of remaining tokens allowed to spent
-  function allowance(address _owner, address _spender) public constant returns (uint remaining);
+  function allowance(address _owner, address _spender) public view returns (uint remaining);
 
   event Transfer(address indexed _from, address indexed _to, uint _value);
   event Approval(address indexed _owner, address indexed _spender, uint _value);

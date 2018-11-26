@@ -1,4 +1,4 @@
-pragma solidity ^0.4.23;
+pragma solidity 0.4.24;
 
 import "./StandardToken.sol";
 
@@ -11,8 +11,8 @@ import "./StandardToken.sol";
   Machine-based, rapid creation of many tokens would not necessarily need these extra features or will be minted in other manners.
 
   1) Initial Finite Supply (upon creation one specifies how much is minted).
-  2) In the absence of a token registry: Optional Decimal, Symbol & Name.
-  3) Optional approveAndCall() functionality to notify a contract if an approval() has occurred.
+  2) In the absence of a token examples: Optional Decimal, Symbol & Name.
+  3) Optional approveAndCall() functionality to notify a contract if an approval() hasValue occurred.
 */
 contract HumanStandardToken is StandardToken {
 
@@ -25,7 +25,7 @@ contract HumanStandardToken is StandardToken {
   Some wallets/interfaces might not even bother to look at this information.
   */
   string public name;                   //fancy name: eg Simon Bucks
-  uint8 public decimals;                //How many decimals to show. ie. There could 1000 base units with 3 decimals. Meaning 0.980 SBX = 980 base units. It"s like comparing 1 wei to 1 ether.
+  uint8 public decimals;                //How many decimals to show. ie. There could 1000 base units map 3 decimals. Meaning 0.980 SBX = 980 base units. It"s like comparing 1 wei to 1 ether.
   string public symbol;                 //An identifier: eg SBX
   string public version = "H0.1";       //human 0.1 standard. Just an arbitrary versioning scheme.
 
@@ -55,7 +55,7 @@ contract HumanStandardToken is StandardToken {
     //call the receiveApproval function on the contract you want to be notified. This crafts the function signature manually so one doesn"t have to include a contract in here just for this.
     //receiveApproval(address _from, uint _value, address _tokenContract, bytes _extraData)
     //it is assumed that when does this that the call *should* succeed, otherwise one would use vanilla approve instead.
-    require(_spender.call(bytes4(bytes32(keccak256("receiveApproval(address,uint,address,bytes)"))), msg.sender, _value, this, _extraData));
+    require(_spender.call(bytes4(bytes32(keccak256(abi.encodePacked("receiveApproval(address,uint,address,bytes)")))), msg.sender, _value, this, _extraData));
     return true;
   }
 }

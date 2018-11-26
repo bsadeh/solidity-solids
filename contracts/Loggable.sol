@@ -1,4 +1,4 @@
-pragma solidity ^0.4.23;
+pragma solidity 0.4.24;
 
 
 /* a general purpose event publish, intended to be mixed-in */
@@ -9,18 +9,17 @@ contract Loggable {
   Level public level = Level.none;
 
   function levelString() public constant returns (string result) {
-    uint _level_ = uint(level);
-    if (0 == _level_) return "trace";
-    if (1 == _level_) return "debug";
-    if (2 == _level_) return "info";
-    if (3 == _level_) return "warn";
-    if (4 == _level_) return "error";
-    if (5 == _level_) return "fatal";
+    if (level == Level.trace) return "trace";
+    if (level == Level.debug) return "debug";
+    if (level == Level.info) return "info";
+    if (level == Level.warn) return "warn";
+    if (level == Level.error) return "error";
+    if (level == Level.fatal) return "fatal";
     return "none";
   }
 
   function setLogLevel(uint _level) public {
-    require(uint(Level.none) >= _level);
+    require(_level <= uint(Level.none));
     level = Level(_level);
   }
 
@@ -33,7 +32,7 @@ contract Loggable {
     else if (equals(_level, "fatal")) level = Level.fatal;
     else level = Level.none;
   }
-  function equals(string a, string b) private pure returns (bool) {return keccak256(a) == keccak256(b); }
+  function equals(string a, string b) private pure returns (bool) {return keccak256(bytes(a)) == keccak256(bytes(b)); }
 
   function trace(string _message) public { if (level <= Level.trace) log(Level.trace, _message); }
   function debug(string _message) public { if (level <= Level.debug) log(Level.debug, _message); }
@@ -45,5 +44,5 @@ contract Loggable {
   function log(Level _level, string _message) private {
     emit Log(_level, now, _message);
   }
-  event Log(Level indexed level, uint time, string message);
+  event Log(Level indexed level, uint timestamp, string message);
 }

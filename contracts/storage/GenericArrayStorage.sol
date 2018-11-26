@@ -1,4 +1,4 @@
-pragma solidity ^0.4.23;
+pragma solidity 0.4.24;
 
 import "./HasReaders.sol";
 import "./HasWriters.sol";
@@ -117,10 +117,10 @@ contract GenericArrayStorage is HasReaders, HasWriters {
     bytesArrayStore[key].length -= 1;
   }
   function stringRemove(bytes32 key, string value) onlyWriter public {
-    bytes32 hash = keccak256(value);
+    bytes32 hash = keccak256(bytes(value));
     uint last = stringArrayStore[key].length - 1;
     for (uint i = 0; i < last; i++) {
-      if (keccak256(stringArrayStore[key][i]) == hash) {
+      if (keccak256(bytes(stringArrayStore[key][i])) == hash) {
         stringArrayStore[key][i] = stringArrayStore[key][last]; // replace with last entry
         delete stringArrayStore[key][last];
         break;

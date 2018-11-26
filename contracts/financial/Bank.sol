@@ -1,4 +1,4 @@
-pragma solidity ^0.4.23;
+pragma solidity 0.4.24;
 
 import "../external/Token.sol";
 import "../Switchable.sol";
@@ -12,7 +12,6 @@ import "./Accountant.sol";
   note that the Bank uses an Accountant to track fund allocations
 */
 contract Bank is Switchable, HasOwners, HasBankers, Accountant {
-  string public constant version = "1.0.0";
   address internal constant ETH = address(0x0); // a hack to allow tracking ether deposit/withdrawal
 
   constructor(address nominator) HasOwners(nominator) HasBankers(nominator) public { }

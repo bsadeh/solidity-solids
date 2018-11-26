@@ -12,51 +12,64 @@
   ],
   "author": "Benny Sadeh <benny.sadeh@gmail.com>",
   "license": "MIT",
+  "main": "src/index.js",
   "bugs": {
     "url": "https://github.com/bsadeh/solidity-solids/issues"
   },
   "homepage": "https://github.com/bsadeh/solidity-solids",
+  "engines": {
+    "node": ">= 10.12.0",
+    "yarn": ">= 1.12.3"
+  },
   "babel": {
     "presets": [
       ["@babel/preset-env", {"targets": {"node": "current"}}]
     ]
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "./test.jest.js",
+    "setupTestFrameworkScriptFile": "./test/test.jest.js",
     "testMatch": [
       "**/test/**/?(*.)(spec|test|it).js"
-    ]
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/test/contracts/",
+      "<rootDir>/node_modules/"
+    ],
+    "testURL": "http://localhost"
   },
   "scripts": {
-    "build": "babel src -d dist -s",
     "solium": "solium -d contracts/",
     "solhint": "solhint contracts/**/*.sol",
-    "test:coverage": "solidity-coverage",
-    "test": "node test.truffle.js"
+    "lint": "yarn solium & yarn solhint",
+    "abi": "truffle compile && rm src/contracts/abi/* && yarn abi:extract && yarn generate:contracts:docs",
+    "abi:extract": "node scripts/extract-abi",
+    "generate:contracts:docs": "scripts/generate_contracts_docs.sh",
+    "test:jest": "jest",
+    "test:truffle": "truffle test test/contracts/**/*.spec.js",
+    "test:truffle:debug": "scripts/test-truffle-debug.sh",
+    "test": "yarn test:jest & yarn test:truffle"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.44",
-    "@babel/core": "^7.0.0-beta.44",
-    "@babel/preset-env": "^7.0.0-beta.44",
-    "@babel/register": "^7.0.0-beta.44",
-    "babel-core": "^7.0.0-bridge.0",
-    "expect.js": "^0.3.1",
-    "ganache-cli": "^6.1.0",
-    "jest": "^22.4.3",
+    "@babel/core": "7.1.6",
+    "@babel/preset-env": "7.1.6",
+    "@babel/register": "7.0.0",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "bluebird": "^3.5.3",
+    "cross-env": "^5.2.0",
+    "eth-gas-reporter": "^0.1.12",
+    "jest": "^23.6.0",
     "jest-immutable-matchers": "^2.0.1",
-    "solhint": "^1.1.10",
-    "solidity-coverage": "^0.5.0",
-    "solium": "^1.1.5",
-    "truffle": "^4.1.7",
-    "truffle-flattener": "^1.2.5",
-    "truffle-hdwallet-provider": "0.0.3"
+    "solhint": "^1.4.0",
+    "solium": "^1.1.8",
+    "truffle": "^4.1.14",
+    "underscore": "^1.9.1"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.0.0-beta.44",
-    "eth-lib": "^0.2.8",
-    "ethjs-provider-http": "^0.1.6",
-    "ethjs-rpc": "^0.1.8",
-    "immutable": "^3.8.2",
-    "web3": "^1.0.0-beta.33"
+    "ethereumjs-util": "^6.0.0",
+    "immutable": "^4.0.0-rc.12",
+    "lodash": "^4.17.11",
+    "uuid-parse": "^1.0.0",
+    "web3": "1.0.0-beta.35"
   }
 }

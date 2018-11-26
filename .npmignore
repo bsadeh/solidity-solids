@@ -1,0 +1,12 @@
+deployment
+contracts
+!src
+!src/contracts
+test
+scripts
+truffle.js
+.gitattribute
+.sol*
+.dockerignore
+Dockerfile
+
